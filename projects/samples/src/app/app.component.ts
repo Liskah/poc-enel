@@ -92,6 +92,12 @@ const TREE_DATA: SampleNode[] = [
       { name: "PERT Chart & Critical Path Visualization", path: "pertchart" },
       { name: "Routing hidden grand parents connections", path: "familyhidegrandparentsconnections" }
     ]
+  },
+  {
+    name: "Poc Enel",
+    children: [
+      { name: "Esempio", path: "example" },
+    ]
   }
 ];
 
@@ -108,7 +114,7 @@ interface SampleFlatNode {
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'samples';
+  title = 'poc-enel';
   showFiller = true;
 
   private _transformer = (node: SampleNode, level: number) => {
