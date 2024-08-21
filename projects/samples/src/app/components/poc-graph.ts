@@ -27,19 +27,36 @@ export class PocGraph {
     this.json.forEach((element: any) => {
       const azionisti: any = [];
       element.azionistiModel.forEach((azionista: any) => {
-        azionisti.push(azionista.idAzionista.toString());
-        parents.add(azionista.idAzionista.toString());
+        const id = this.truncateId(azionista.idAzionista);
+        azionisti.push(id);
+        if (parents.has(id)) {
+        } else {
+          const nuovoItem = new FamItemConfig({
+            id: id,
+            parents: [],
+            title: '-' + id,
+            label: 'Corp ' + id,
+            description: 'Parent ' + id,
+            image: './assets/photos/p.png',
+          });
+          console.log('newItem: ', nuovoItem);
+          this.items = [...this.items, nuovoItem];
+          parents.add(this.truncateId(id));
+        }
       });
 
+      const companyId = this.truncateId(element.idCompany);
       const newItem = new FamItemConfig({
-        id: element.idCompany.toString(),
+        id: companyId,
         parents: azionisti,
-        title: '-' + element.idCompany,
-        label: 'Corp ' + element.idCompany,
-        description: 'Parent ' + element.idCompany,
+        title: '-' + companyId,
+        label: 'Corp ' + companyId,
+        description: 'Parent ' + companyId,
         image: './assets/photos/p.png',
       });
+      console.log(newItem);
       this.items = [...this.items, newItem];
+      /*
       parents.forEach((par) => {
         const newItem = new FamItemConfig({
           id: par.toString(),
@@ -51,9 +68,17 @@ export class PocGraph {
         });
         this.items = [...this.items, newItem];
       });
+      */
       console.log(azionisti);
       console.log(element.idCompany);
     });
+  }
+
+  truncateId(id: number | string | null): string {
+    if (id && id !== 0) {
+      return id.toString().slice(-8);
+    }
+    return '';
   }
 
   /*
