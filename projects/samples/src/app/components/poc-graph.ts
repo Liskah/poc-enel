@@ -1,8 +1,10 @@
 import { Component } from '@angular/core';
 import {
+  AnnotationType,
   Enabled,
   FamItemConfig,
   GroupByType,
+  LabelAnnotationConfig,
   PageFitMode,
 } from 'ngx-basic-primitives';
 
@@ -21,17 +23,25 @@ export class PocGraph {
 
   items: FamItemConfig[] = [];
   json = mockData;
+  annotations: LabelAnnotationConfig[] = [];
 
   ngOnInit(): void {
     const parents: Set<string> = new Set([]);
     this.json.forEach((element: any) => {
       const azionisti: any = [];
+
       element.azionistiModel.forEach((azionista: any) => {
         const id = this.truncateId(azionista.idAzionista);
-        azionisti.push(id);
+        azionisti.push(
+          {
+            id: id, 
+            percentualeDetenuta: Math.round(azionista.percentualeDetenuta)
+          }
+        );
+
         if (parents.has(id)) {
         } else {
-          const nuovoItem = new FamItemConfig({
+          const graphItem = new FamItemConfig({
             id: id,
             parents: [],
             title: '-' + id,
@@ -39,23 +49,40 @@ export class PocGraph {
             description: 'Parent ' + id,
             image: './assets/photos/p.png',
           });
-          console.log('newItem: ', nuovoItem);
-          this.items = [...this.items, nuovoItem];
+
+          //console.log('annotationGraphItem: ', annotationGraphItem);
+
+          this.items = [...this.items, graphItem];
           parents.add(this.truncateId(id));
         }
       });
 
       const companyId = this.truncateId(element.idCompany);
-      const newItem = new FamItemConfig({
+      const gItem = new FamItemConfig({
         id: companyId,
-        parents: azionisti,
+        parents: azionisti.map((el: any) => el.id),
         title: '-' + companyId,
         label: 'Corp ' + companyId,
         description: 'Parent ' + companyId,
         image: './assets/photos/p.png',
       });
-      console.log(newItem);
-      this.items = [...this.items, newItem];
+
+      azionisti.forEach((azionista: any) => {
+        const annotationGraphItem = new LabelAnnotationConfig({
+          annotationType: AnnotationType.Label,
+          fromItem: gItem.id as string,
+          toItems: [azionista.id],
+          title: azionista.percentualeDetenuta + '% ',
+        });
+        console.log("annotationGraphItem", annotationGraphItem)
+        
+        this.annotations = [...this.annotations, annotationGraphItem]
+        
+      })
+
+      //console.log(gItem);
+      this.items = [...this.items, gItem];
+      
       /*
       parents.forEach((par) => {
         const newItem = new FamItemConfig({
@@ -69,8 +96,8 @@ export class PocGraph {
         this.items = [...this.items, newItem];
       });
       */
-      console.log(azionisti);
-      console.log(element.idCompany);
+      //console.log(azionisti);
+      //console.log(element.idCompany);
     });
   }
 
@@ -81,128 +108,4 @@ export class PocGraph {
     return '';
   }
 
-  /*
-  items = [
-    new FamItemConfig({
-      id: 1,
-      parents: [],
-      title: 'Corp 1',
-      label: 'Corp 1',
-      description: 'Parent 1',
-      image: './assets/photos/p.png',
-    }),
-    new FamItemConfig({
-      id: 2,
-      parents: [],
-      title: 'Corp 2',
-      label: 'Corp 2',
-      description: 'Parent 2',
-      image: './assets/photos/p.png',
-    }),
-    new FamItemConfig({
-      id: 101,
-      parents: [],
-      title: 'Corp 3',
-      label: 'Corp 3',
-      description: 'Parent 3',
-      image: './assets/photos/p.png',
-    }),
-    new FamItemConfig({
-      id: 102,
-      parents: [],
-      title: 'Corp 4',
-      label: 'Corp 4',
-      description: 'Parent 4',
-      image: './assets/photos/p.png',
-    }),
-    new FamItemConfig({
-      id: 3,
-      parents: [1, 2, 101, 102],
-      title: 'Sibling 1',
-      label: 'Sibling 1',
-      description: 'Sibling 1',
-      image: './assets/photos/s.png',
-    }),
-    new FamItemConfig({
-      id: 4,
-      parents: [1, 2, 101, 102],
-      title: 'Sibling 2',
-      label: 'Sibling 2',
-      description: 'Sibling 2',
-      image: './assets/photos/s.png',
-    }),
-    new FamItemConfig({
-      id: 5,
-      parents: [1, 2, 101, 102],
-      title: 'Sibling 3',
-      label: 'Sibling 3',
-      description: 'Sibling 3',
-      image: './assets/photos/s.png',
-    }),
-    new FamItemConfig({
-      id: 6,
-      parents: [1, 2, 101, 102],
-      title: 'Sibling 4',
-      label: 'Sibling 4',
-      description: 'Sibling 4',
-      image: './assets/photos/s.png',
-    }),
-    new FamItemConfig({
-      id: 7,
-      parents: [1, 2, 101, 102],
-      title: 'Sibling 5',
-      label: 'Sibling 5',
-      description: 'Sibling 5',
-      image: './assets/photos/s.png',
-    }),
-    new FamItemConfig({
-      id: 8,
-      parents: [1, 2, 101, 102],
-      title: 'Sibling 6',
-      label: 'Sibling 6',
-      description: 'Sibling 6',
-      image: './assets/photos/s.png',
-    }),
-    new FamItemConfig({
-      id: 9,
-      parents: [1, 2, 101, 102],
-      title: 'Sibling 7',
-      label: 'Sibling 7',
-      description: 'Sibling 7',
-      image: './assets/photos/s.png',
-    }),
-    new FamItemConfig({
-      id: 10,
-      parents: [3, 4, 5, 6, 7, 8, 9],
-      title: 'Grand Child 1',
-      label: 'Grand Child 1',
-      description: 'Grand Child 1',
-      image: './assets/photos/c.png',
-    }),
-    new FamItemConfig({
-      id: 11,
-      parents: [3, 4, 5, 6, 7, 8, 9],
-      title: 'Grand Child 2',
-      label: 'Grand Child 2',
-      description: 'Grand Child 2',
-      image: './assets/photos/c.png',
-    }),
-    new FamItemConfig({
-      id: 12,
-      parents: [3, 4, 5, 6, 7, 8, 9],
-      title: 'Grand Child 3',
-      label: 'Grand Child 3',
-      description: 'Grand Child 3',
-      image: './assets/photos/c.png',
-    }),
-    new FamItemConfig({
-      id: 13,
-      parents: [3, 4, 5, 6, 7, 8, 9],
-      title: 'Grand Child 4',
-      label: 'Grand Child 4',
-      description: 'Grand Child 4',
-      image: './assets/photos/c.png',
-    }),
-  ];
-  */
 }
