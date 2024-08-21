@@ -1,5 +1,5 @@
 <h1>Matrix Nodes Layout in Family Chart</h1>
-<div class="sample">
+<div class="graph">
     <fam-diagram 
         [items]="items"
         [annotations]="annotations"
@@ -19,5 +19,21 @@
         [enableMatrixLayout]=true
         [minimumMatrixSize]=3
         [centerOnCursor]=true
-    ></fam-diagram>
+    >
+    </fam-diagram>
+
+
+    <div class="legend">
+        <div class="legend-button">
+            <div *ngIf="showLegend" class="legend-content">
+                <div *ngFor="let item of legendItems" class="legend-item-wrapper">
+                    {{item.name}}
+                   <div [ngStyle]="{'background-color': item.color}" class="legend-item"></div>
+                </div>
+            </div>
+            <div class="legend-on-over" (mouseenter)="showLegend = true" (mouseleave)="showLegend = false">
+                LEGEND
+            </div>
+        </div>
+    </div>
 </div>

@@ -24,11 +24,25 @@ export class PocGraph {
   items: FamItemConfig[] = [];
   json = mockData;
   annotations: LabelAnnotationConfig[] = [];
+  showLegend: boolean = false;
+  legendItems: { name: string, color: string }[] = [];
 
   ngOnInit(): void {
-    const parents: Set<string> = new Set([]);
+    const parents = new Set<string>([]);
+    
     this.json.forEach((element: any) => {
       const azionisti: any = [];
+      const valuta = element.azioniModel[0].valuta;
+      const colorItem = this.generateHexColorFromString(valuta);
+
+      let result = true;
+      this.legendItems.forEach((el) => {
+        if(el.name === valuta) {
+          result = false;
+        }
+      })
+
+      if(result) this.legendItems.push({name: valuta, color: colorItem})
 
       element.azionistiModel.forEach((azionista: any) => {
         const id = this.truncateId(azionista.idAzionista);
@@ -44,13 +58,12 @@ export class PocGraph {
           const graphItem = new FamItemConfig({
             id: id,
             parents: [],
-            title: '-' + id,
+            title: valuta,
             label: 'Corp ' + id,
             description: 'Parent ' + id,
-            image: './assets/photos/p.png',
+            image: `./assets/photos/${(valuta.slice(0,1)).toLowerCase()}.png`,
+            itemTitleColor: colorItem
           });
-
-          //console.log('annotationGraphItem: ', annotationGraphItem);
 
           this.items = [...this.items, graphItem];
           parents.add(this.truncateId(id));
@@ -61,10 +74,11 @@ export class PocGraph {
       const gItem = new FamItemConfig({
         id: companyId,
         parents: azionisti.map((el: any) => el.id),
-        title: '-' + companyId,
+        title: valuta,
         label: 'Corp ' + companyId,
         description: 'Parent ' + companyId,
-        image: './assets/photos/p.png',
+        image: `./assets/photos/${(valuta.slice(0,1)).toLowerCase()}.png`,
+        itemTitleColor: colorItem
       });
 
       azionisti.forEach((azionista: any) => {
@@ -74,30 +88,13 @@ export class PocGraph {
           toItems: [azionista.id],
           title: azionista.percentualeDetenuta + '% ',
         });
-        console.log("annotationGraphItem", annotationGraphItem)
         
         this.annotations = [...this.annotations, annotationGraphItem]
         
       })
 
-      //console.log(gItem);
       this.items = [...this.items, gItem];
-      
-      /*
-      parents.forEach((par) => {
-        const newItem = new FamItemConfig({
-          id: par.toString(),
-          parents: [],
-          title: '-' + par,
-          label: 'Corp ' + par,
-          description: 'Parent ' + par,
-          image: './assets/photos/p.png',
-        });
-        this.items = [...this.items, newItem];
-      });
-      */
-      //console.log(azionisti);
-      //console.log(element.idCompany);
+
     });
   }
 
@@ -106,6 +103,22 @@ export class PocGraph {
       return id.toString().slice(-8);
     }
     return '';
+  }
+
+  generateHexColorFromString(input: string): string {
+    let hash = 0;
+    for (let i = 0; i < input.length; i++) {
+      hash = input.charCodeAt(i) + ((hash << 5) - hash);
+    }
+
+    // Convert the hash to a hex color
+    let color = '#';
+    for (let i = 0; i < 3; i++) {
+      const value = (hash >> (i * 8)) & 0xFF;
+      color += ('00' + value.toString(16)).slice(-2);
+    }
+
+    return color;
   }
 
 }
