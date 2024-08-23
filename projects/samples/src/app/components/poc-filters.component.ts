@@ -1,12 +1,14 @@
 import { Component } from '@angular/core';
-import { OrgConfig } from 'dist/ngx-basic-primitives/lib/configs/org-config';
 import {
+  AnnotationType,
+  Colors,
   Enabled,
-  FamItemConfig,
   GroupByType,
+  LevelAnnotationConfig,
+  LineType,
   OrgItemConfig,
   PageFitMode,
-  SelectionPathMode,
+  Thickness,
 } from 'ngx-basic-primitives';
 
 // @ts-ignore
@@ -21,12 +23,21 @@ export class PocFiltersComponent {
   Enabled = Enabled;
   GroupByType = GroupByType;
 
+  annotations: LevelAnnotationConfig[] = [];
   items: OrgItemConfig[] = [];
   itemsOriginal: OrgItemConfig[] = [];
   levels = 5;
 
   minLeafs = this.levels;
   minRoots = this.levels;
+
+  groupsCategory = ['DI', 'SNC', 'SAS', 'SPA', 'SRL', 'COOP'];
+
+  groupsObject: { name: string; value: boolean }[] = this.groupsCategory.map(
+    (elem) => {
+      return { name: elem, value: true };
+    }
+  );
   //annotations: LabelAnnotationConfig[] = [];
 
   ngOnInit(): void {
@@ -35,18 +46,40 @@ export class PocFiltersComponent {
   }
 
   generateTree(n: number) {
+    for (let i = 0; i < n; i++) {
+      this.annotations.push(
+        new LevelAnnotationConfig({
+          annotationType: AnnotationType.Level,
+          levels: [i],
+          title: 'Level ' + i,
+          titleColor: Object.keys(Colors)[i + 10],
+          offset: new Thickness(0, 0, 0, -1),
+          lineWidth: new Thickness(0, 0, 0, 0),
+          opacity: 0,
+          borderColor: Colors.Gray,
+          fillColor: Colors.Gray,
+          lineType: LineType.Dotted,
+          titleFontColor: 'black',
+        })
+      );
+    }
+
     let nodes: OrgItemConfig[] = [];
     let currentLevel = 0;
     let currentId = 1;
+    const groups = this.groupsCategory;
+    //const groupT = this.groupsCategory[Math.floor(Math.random() * (5 - 0 + 1))];
 
     function createNode(id: number, parentId: number, level: number) {
+      const randomNum = Math.floor(Math.random() * 6);
       return new OrgItemConfig({
         id: 'i' + id,
         parent: 'i' + parentId,
         title: `Node ${id}`,
         description: `Description for node ${id}`,
         image: `./assets/photos/d.png`,
-        groupTitle: 'level' + level,
+        groupTitle: groups[randomNum],
+        groupTitleColor: Object.keys(Colors)[randomNum + 20],
         context: { level: level },
       });
     }
@@ -89,8 +122,8 @@ export class PocFiltersComponent {
       if (el.context.level === minLevel + 1) {
         el = {
           ...el,
-          parent: null
-        }
+          parent: null,
+        };
         return el;
       }
       return el;
@@ -116,15 +149,44 @@ export class PocFiltersComponent {
 
   onResetBtnClick() {
     const updatedTreeItems = this.items.map((el: OrgItemConfig) => {
-      if(el.isVisible === false) {
+      if (el.isVisible === false) {
         el.isVisible = true;
         el.isActive = true;
-        return el
+        return el;
       }
 
       return el;
     });
 
     this.items = updatedTreeItems;
+    this.groupsObject = this.groupsObject.map((group) => {
+      return { name: group.name, value: true };
+    });
+  }
+
+  changedGroupSelection(e: any) {
+    console.log(e);
+    const groupFound = this.groupsObject.find(
+      (elem) => elem.name === e.target.id
+    );
+    if (groupFound) {
+      groupFound.value = e.target.checked;
+      this.hideShowGroups(groupFound);
+    }
+  }
+
+  hideShowGroups(group: { name: string; value: boolean }) {
+    this.items = this.items.map((el: OrgItemConfig) => {
+      if (el.groupTitle === group.name) {
+        if (group.value) {
+          el.isVisible = true;
+          el.isActive = true;
+        } else {
+          el.isVisible = false;
+          el.isActive = false;
+        }
+      }
+      return el;
+    });
   }
 }

@@ -16,11 +16,16 @@
             <input type="range" id="filterRoots" min="0" [max]="levels" (change)="hideRoots($event)"/>
             <label for="filterRoots" style="padding-left: 5px;">Nascondi radici ({{minRoots}}) </label>
         </div>
+        <div *ngFor="let group of groupsObject">
+            <input type="checkbox" [id]="group.name" name="GROUPS" (change)="changedGroupSelection($event)" [(ngModel)]="group.value"/>
+            <label [for]="group.name">{{group.name}}</label>
+        </div>
     </div>
 </div>
 
 <div class="graph">
     <org-diagram 
+        [annotations]="annotations"
         [items]="items"
         [pageFitMode]=PageFitMode.None
         [cursorItem]=null
