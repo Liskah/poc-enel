@@ -1,0 +1,27 @@
+<div class="flex-container margin-bottom">
+    <label for="filterLeafs">Nascondi foglie ({{minLeafs}}) </label>
+    <input type="range" id="filterLeafs" min="0" [max]="levels" (change)="hideLeafs($event)" />
+    <label for="filterRoots">Nascondi radici ({{minRoots}}) </label>
+    <input type="range" id="filterRoots" min="0" [max]="levels" (change)="hideRoots($event)" />
+</div>
+
+<div class="graph">
+    <org-diagram 
+        [items]="items"
+        [pageFitMode]=PageFitMode.None
+        [cursorItem]=1
+        [linesWidth]=1
+        [arrowsDirection]=GroupByType.Children
+        [showExtraArrows]=true
+        [linesColor]="'black'"
+        [normalLevelShift]=20
+        [dotLevelShift]=20
+        [lineLevelShift]=20
+        [normalItemsInterval]=20
+        [dotItemsInterval]=30
+        [lineItemsInterval]=30
+        [hasSelectorCheckbox]=Enabled.False
+        [centerOnCursor]=true
+    >
+    </org-diagram>
+</div>

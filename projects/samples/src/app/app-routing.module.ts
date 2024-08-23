@@ -7,7 +7,9 @@ import { AutoSizeComponent } from './auto-size.component';
 import { ButtonsPanelComponent } from './buttons-panel.component';
 import { ChildrenAndAssistantsLevelOffsetComponent } from './children-and-assistants-level-offset.component';
 import { ChildrenPlacementTypeComponent } from './children-placement-type.component';
-import { PocGraph } from './components/poc-graph';
+import { PocFiltersComponent } from './components/poc-filters.component';
+import { PocGraphComponent } from './components/poc-graph.component';
+import { PocTreeComponent } from './components/poc-tree.component';
 import { ConnectorAnnotationComponent } from './connector-annotation.component';
 import { CrossBranchAlignmentComponent } from './cross-branch-alignment.component';
 import { CursorTemplateComponent } from './cursor-template.component';
@@ -193,7 +195,9 @@ const routes: Routes = [
     path: 'familyhidegrandparentsconnections',
     component: FamilyHideGrandParentsConnectionsComponent,
   },
-  { path: 'example', component: PocGraph },
+  { path: 'examplegraph', component: PocGraphComponent },
+  { path: 'exampletree', component: PocTreeComponent },
+  { path: 'examplefilters', component: PocFiltersComponent },
   { path: '', redirectTo: '/firstorganizationalchart', pathMatch: 'full' },
 ];
 

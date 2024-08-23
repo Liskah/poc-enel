@@ -27,7 +27,9 @@ import { AutoSizeComponent } from './auto-size.component';
 import { ButtonsPanelComponent } from './buttons-panel.component';
 import { ChildrenAndAssistantsLevelOffsetComponent } from './children-and-assistants-level-offset.component';
 import { ChildrenPlacementTypeComponent } from './children-placement-type.component';
-import { PocGraph } from './components/poc-graph';
+import { PocFiltersComponent } from './components/poc-filters.component';
+import { PocGraphComponent } from './components/poc-graph.component';
+import { PocTreeComponent } from './components/poc-tree.component';
 import { ConnectorAnnotationComponent } from './connector-annotation.component';
 import { CrossBranchAlignmentComponent } from './cross-branch-alignment.component';
 import { CursorTemplateComponent } from './cursor-template.component';
@@ -131,7 +133,9 @@ import { ZoomWithItemTemplateComponent } from './zoom-with-item-template.compone
     HighlightPathAnnotationComponent,
     PertChartComponent,
     FamilyHideGrandParentsConnectionsComponent,
-    PocGraph,
+    PocGraphComponent,
+    PocTreeComponent,
+    PocFiltersComponent,
   ],
   imports: [
     BrowserModule,

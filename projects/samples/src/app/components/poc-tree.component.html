@@ -1,8 +1,18 @@
 <h1>Matrix Nodes Layout in Family Chart</h1>
-<div class="graph">
-    <fam-diagram 
+<div class="flex-container justify">
+    <div class="flex-child-3">
+        <textarea class="textarea" placeholder="Incolla qui il tuo json . . ." [(ngModel)]="jsonTextArea"></textarea>
+    </div>
+    <div class="flex-child submitDiv">
+        <button class="btn resetBtn" (click)="onJsonReset()">Reset</button>
+        <button class="btn submitBtn" (click)="onJsonSubmit()">Genera</button>
+    </div>
+</div>
+
+
+<div class="graph" *ngIf="!errorMsg">
+    <org-diagram 
         [items]="items"
-        [annotations]="annotations"
         [pageFitMode]=PageFitMode.None
         [cursorItem]=1
         [linesWidth]=1
@@ -16,17 +26,15 @@
         [dotItemsInterval]=30
         [lineItemsInterval]=30
         [hasSelectorCheckbox]=Enabled.False
-        [enableMatrixLayout]=true
-        [minimumMatrixSize]=3
         [centerOnCursor]=true
     >
-    </fam-diagram>
+    </org-diagram>
 
 
     <div class="legend">
         <div class="legend-button">
             <div *ngIf="showLegend" class="legend-content">
-                <div *ngFor="let item of legendItems" class="legend-item-wrapper">
+                <div *ngFor="let item of legendItems" class="legend-item-wrapper flex-container">
                     {{item.name}}
                    <div [ngStyle]="{'background-color': item.color}" class="legend-item"></div>
                 </div>
@@ -36,4 +44,8 @@
             </div>
         </div>
     </div>
+</div>
+
+<div *ngIf="errorMsg" class="error">
+    {{errorMsg}}
 </div>
