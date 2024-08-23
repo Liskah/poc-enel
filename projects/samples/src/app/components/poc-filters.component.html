@@ -1,15 +1,29 @@
-<div class="flex-container margin-bottom">
-    <label for="filterLeafs">Nascondi foglie ({{minLeafs}}) </label>
-    <input type="range" id="filterLeafs" min="0" [max]="levels" (change)="hideLeafs($event)" />
-    <label for="filterRoots">Nascondi radici ({{minRoots}}) </label>
-    <input type="range" id="filterRoots" min="0" [max]="levels" (change)="hideRoots($event)" />
+<div class="margin-bottom">
+    <p class="p-title"><strong>Applica filtri:</strong></p>
+
+    <div>
+        <div class="pb centered">
+            <button id="resetTree" mat-icon-button aria-label="Reset tree" (click)="onResetBtnClick()">
+                <mat-icon>visibility</mat-icon>
+            </button>
+            <label for="resetTree" style="padding-left: 5px;">Resetta nodi</label>
+        </div>
+        <div class="pb">
+            <input type="range" id="filterLeafs" min="0" [max]="levels" (change)="hideLeafs($event)"/>
+            <label for="filterLeafs" style="padding-left: 5px;">Nascondi foglie ({{minLeafs}}) </label>
+        </div>
+        <div>
+            <input type="range" id="filterRoots" min="0" [max]="levels" (change)="hideRoots($event)"/>
+            <label for="filterRoots" style="padding-left: 5px;">Nascondi radici ({{minRoots}}) </label>
+        </div>
+    </div>
 </div>
 
 <div class="graph">
     <org-diagram 
         [items]="items"
         [pageFitMode]=PageFitMode.None
-        [cursorItem]=1
+        [cursorItem]=null
         [linesWidth]=1
         [arrowsDirection]=GroupByType.Children
         [showExtraArrows]=true
@@ -22,6 +36,15 @@
         [lineItemsInterval]=30
         [hasSelectorCheckbox]=Enabled.False
         [centerOnCursor]=true
+        [buttonsTemplate]="buttonsTemplate"
+        [buttonsPanelSize]=40
+        [hasButtons]=Enabled.True
     >
     </org-diagram>
+
+    <ng-template #buttonsTemplate let-itemConfig="context">
+        <button mat-icon-button aria-label="Hide node" (click)="onHideBtnClick(itemConfig)">
+            <mat-icon>visibility_off</mat-icon>
+        </button>
+    </ng-template>
 </div>

@@ -136,3 +136,16 @@
 .flex-align{
   align-items: center;
 }
+
+.pb {
+  padding-bottom: 6px;
+}
+
+.p-title {
+  font-size: 20px;
+}
+
+.centered {
+  display: flex;
+  align-items: center;
+}

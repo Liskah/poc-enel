@@ -1,9 +1,12 @@
 import { Component } from '@angular/core';
+import { OrgConfig } from 'dist/ngx-basic-primitives/lib/configs/org-config';
 import {
   Enabled,
+  FamItemConfig,
   GroupByType,
   OrgItemConfig,
   PageFitMode,
+  SelectionPathMode,
 } from 'ngx-basic-primitives';
 
 // @ts-ignore
@@ -86,7 +89,7 @@ export class PocFiltersComponent {
       if (el.context.level === minLevel + 1) {
         el = {
           ...el,
-          parent: null,
+          parent: null
         }
         return el;
       }
@@ -104,5 +107,24 @@ export class PocFiltersComponent {
   hideRoots(e: any) {
     this.minRoots = e.target.valueAsNumber;
     this.items = this.filterRoots(this.levels - e.target.valueAsNumber);
+  }
+
+  onHideBtnClick(itemConfig: OrgItemConfig) {
+    itemConfig.isVisible = false;
+    itemConfig.isActive = false;
+  }
+
+  onResetBtnClick() {
+    const updatedTreeItems = this.items.map((el: OrgItemConfig) => {
+      if(el.isVisible === false) {
+        el.isVisible = true;
+        el.isActive = true;
+        return el
+      }
+
+      return el;
+    });
+
+    this.items = updatedTreeItems;
   }
 }
