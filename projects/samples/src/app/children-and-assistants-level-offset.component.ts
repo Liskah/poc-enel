@@ -40,20 +40,20 @@ export class ChildrenAndAssistantsLevelOffsetComponent {
     });
     items.push(rootItem);
 
-    const pippo = new OrgItemConfig({
-      id: 1,
-      parent: 0,
-      title: 'Assistant 1',
-      description: 'Assistant Description',
-      image: './assets/photos/a.png',
-      itemType: ItemType.Assistant,
-      adviserPlacementType: AdviserPlacementType.Right,
-      groupTitle: 'Audit',
-      groupTitleColor: Colors.Olive,
-      levelOffset: 4,
-    });
-    items.push(pippo);
-    console.log(pippo);
+    items.push(
+      new OrgItemConfig({
+        id: 1,
+        parent: 0,
+        title: 'Assistant 1',
+        description: 'Assistant Description',
+        image: './assets/photos/a.png',
+        itemType: ItemType.Assistant,
+        adviserPlacementType: AdviserPlacementType.Right,
+        groupTitle: 'Audit',
+        groupTitleColor: Colors.Olive,
+        levelOffset: 4,
+      })
+    );
 
     items.push(
       new OrgItemConfig({
