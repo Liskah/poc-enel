@@ -27,10 +27,8 @@ export class PocFiltersComponent {
   //annotations: LabelAnnotationConfig[] = [];
 
   ngOnInit(): void {
-    //this.createTree();
     this.items = this.generateTree(this.levels);
-    this.itemsOriginal = [...this.items];
-    //this.items = this.filterLeafs(3);
+    this.itemsOriginal = JSON.parse(JSON.stringify(this.items));
   }
 
   generateTree(n: number) {
@@ -77,24 +75,23 @@ export class PocFiltersComponent {
   }
 
   filterRoots(minLevel: number): OrgItemConfig[] {
-    console.log(minLevel + 1);
     const filtered = this.itemsOriginal.filter((item) => {
       if (item.context.level >= minLevel + 1) {
         return true;
       }
       return false;
     });
-    console.log(filtered);
 
-    const pero = filtered.map((item: OrgItemConfig) => {
-      console.log(item.context.level);
-      if (item.context.level === minLevel + 1) {
-        item.parent = null;
-        return item;
+    const pero = filtered.map((el: OrgItemConfig) => {
+      if (el.context.level === minLevel + 1) {
+        el = {
+          ...el,
+          parent: null,
+        }
+        return el;
       }
-      return item;
+      return el;
     });
-    console.log(pero);
 
     return pero;
   }
