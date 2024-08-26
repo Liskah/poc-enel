@@ -26,6 +26,7 @@ export class PocGraphComponent {
   showLegend: boolean = false;
   legendItems: { name: string; color: string }[] = [];
   jsonTextArea = '';
+  //jsonTextArea = JSON.stringify(mockData);
   errorMsg = '';
 
   ngOnInit(): void {

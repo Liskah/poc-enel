@@ -3,22 +3,29 @@
 
     <div>
         <div class="pb centered">
-            <button id="resetTree" mat-icon-button aria-label="Reset tree" (click)="onResetBtnClick()">
-                <mat-icon>visibility</mat-icon>
+            <button id="resetTree" mat-icon-button aria-label="Reset tree" (click)="onResetBtnClick()" class="mat-btn">
+                <mat-icon>refresh</mat-icon>
             </button>
-            <label for="resetTree" style="padding-left: 5px;">Resetta nodi</label>
-        </div>
-        <div class="pb">
-            <input type="range" id="filterLeafs" min="0" [max]="levels" (change)="hideLeafs($event)"/>
-            <label for="filterLeafs" style="padding-left: 5px;">Nascondi foglie ({{minLeafs}}) </label>
+            <label for="resetTree" style="padding-left: 5px;">Resetta filtri</label>
         </div>
         <div>
-            <input type="range" id="filterRoots" min="0" [max]="levels" (change)="hideRoots($event)"/>
-            <label for="filterRoots" style="padding-left: 5px;">Nascondi radici ({{minRoots}}) </label>
+            <input class="input-root" type="number" id="selectRoot" min="1" [(ngModel)]="rootNodeId" (input)="selectNewRoot()"/>
+            <label for="selectRoot">Inserisci un nodo radice</label>
         </div>
-        <div *ngFor="let group of groupsObject">
-            <input type="checkbox" [id]="group.name" name="GROUPS" (change)="changedGroupSelection($event)" [(ngModel)]="group.value"/>
-            <label [for]="group.name">{{group.name}}</label>
+        <div class="pb">
+            <input type="range" id="filterLeafs" min="0" [max]="levels" [value]="leafsValue" (change)="hideLeafs($event)"/>
+            <label for="filterLeafs" style="padding-left: 5px;">Nascondi foglie ({{leafsValue}}) </label>
+        </div>
+        <div>
+            <input type="range" id="filterRoots" min="0" [max]="levels" [value]="rootsValue" (change)="hideRoots($event)"/>
+            <label for="filterRoots" style="padding-left: 5px;">Nascondi radici ({{rootsValue}}) </label>
+        </div>
+        <div *ngFor="let group of groupsObject" class="groupItemCheckbox">
+            <div>
+                <input type="checkbox" [id]="group.name" name="GROUPS" (change)="changedGroupSelection($event)" [(ngModel)]="group.value"/>
+                <label [for]="group.name">{{group.name}}</label>
+            </div>
+            <div [ngStyle]="{'background-color': group.color}" class="legend-item"></div>
         </div>
     </div>
 </div>
@@ -48,8 +55,21 @@
     </org-diagram>
 
     <ng-template #buttonsTemplate let-itemConfig="context">
-        <button mat-icon-button aria-label="Hide node" (click)="onHideBtnClick(itemConfig)">
-            <mat-icon>visibility_off</mat-icon>
-        </button>
+        <div class="node-btn-group">
+            <mat-icon class="btn" (click)="onHideBtnClick(itemConfig)">visibility_off</mat-icon>
+            <mat-icon class="btn" (click)="onUpLevelBtnClick(itemConfig)">keyboard_arrow_up</mat-icon>
+            <mat-icon class="btn" (click)="onDownLevelBtnClick(itemConfig)">keyboard_arrow_down</mat-icon>
+            <!--
+            <button aria-label="Hide node" (click)="onHideBtnClick(itemConfig)">
+                <mat-icon>visibility_off</mat-icon>
+            </button>
+            <button mat-icon-button aria-label="Hide node" (click)="onHideBtnClick(itemConfig)">
+                <mat-icon style="font-size: 10px;">keyboard_arrow_up</mat-icon>
+            </button>
+            <button mat-icon-button aria-label="Hide node" (click)="onHideBtnClick(itemConfig)">
+                <mat-icon style="font-size: 10px;">keyboard_arrow_down</mat-icon>
+            </button>
+        -->
+        </div>
     </ng-template>
 </div>

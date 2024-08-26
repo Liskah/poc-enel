@@ -28,16 +28,20 @@ export class PocFiltersComponent {
   itemsOriginal: OrgItemConfig[] = [];
   levels = 5;
 
-  minLeafs = this.levels;
-  minRoots = this.levels;
+  rootsValue = this.levels;
+  leafsValue = this.levels;
 
+  rootNodeId = 1;
   groupsCategory = ['DI', 'SNC', 'SAS', 'SPA', 'SRL', 'COOP'];
 
-  groupsObject: { name: string; value: boolean }[] = this.groupsCategory.map(
-    (elem) => {
-      return { name: elem, value: true };
-    }
-  );
+  groupsObject: { name: string; value: boolean; color: string }[] =
+    this.groupsCategory.map((elem, index) => {
+      return {
+        name: elem,
+        value: true,
+        color: Object.keys(Colors)[index + 20],
+      };
+    });
   //annotations: LabelAnnotationConfig[] = [];
 
   ngOnInit(): void {
@@ -46,7 +50,7 @@ export class PocFiltersComponent {
   }
 
   generateTree(n: number) {
-    for (let i = 0; i < n; i++) {
+    for (let i = 0; i < 10; i++) {
       this.annotations.push(
         new LevelAnnotationConfig({
           annotationType: AnnotationType.Level,
@@ -65,31 +69,30 @@ export class PocFiltersComponent {
     }
 
     let nodes: OrgItemConfig[] = [];
-    let currentLevel = 0;
     let currentId = 1;
-    const groups = this.groupsCategory;
-    //const groupT = this.groupsCategory[Math.floor(Math.random() * (5 - 0 + 1))];
+    const groups = this.groupsObject;
 
     function createNode(id: number, parentId: number, level: number) {
       const randomNum = Math.floor(Math.random() * 6);
       return new OrgItemConfig({
-        id: 'i' + id,
-        parent: 'i' + parentId,
+        id: 'z' + id,
+        parent: 'z' + parentId,
         title: `Node ${id}`,
         description: `Description for node ${id}`,
         image: `./assets/photos/d.png`,
-        groupTitle: groups[randomNum],
-        groupTitleColor: Object.keys(Colors)[randomNum + 20],
+        groupTitle: groups[randomNum].name,
+        groupTitleColor: groups[randomNum].color,
         context: { level: level },
+        //levelOffset: level,
       });
     }
 
     function addNodes(level: number, parentId: number) {
       if (level > n) return;
 
-      let nodeCount = level === 1 ? 1 : 2; //Math.pow(2, level - 1); // Number of nodes at current level
+      const nodeCount = level === 1 ? 1 : 2;
       for (let i = 0; i < nodeCount; i++) {
-        let nodeId = currentId++;
+        const nodeId = currentId++;
         nodes.push(createNode(nodeId, parentId, level));
         addNodes(level + 1, nodeId);
       }
@@ -120,11 +123,10 @@ export class PocFiltersComponent {
 
     const pero = filtered.map((el: OrgItemConfig) => {
       if (el.context.level === minLevel + 1) {
-        el = {
+        return {
           ...el,
           parent: null,
         };
-        return el;
       }
       return el;
     });
@@ -133,12 +135,18 @@ export class PocFiltersComponent {
   }
 
   hideLeafs(e: any) {
-    this.minLeafs = e.target.valueAsNumber;
+    this.rootNodeId = 1;
+    this.resetGroupObjValues();
+    this.leafsValue = e.target.valueAsNumber;
+    this.rootsValue = this.levels;
     this.items = this.filterLeafs(e.target.valueAsNumber);
   }
 
   hideRoots(e: any) {
-    this.minRoots = e.target.valueAsNumber;
+    this.rootNodeId = 1;
+    this.resetGroupObjValues();
+    this.rootsValue = e.target.valueAsNumber;
+    this.leafsValue = this.levels;
     this.items = this.filterRoots(this.levels - e.target.valueAsNumber);
   }
 
@@ -148,24 +156,21 @@ export class PocFiltersComponent {
   }
 
   onResetBtnClick() {
-    const updatedTreeItems = this.items.map((el: OrgItemConfig) => {
-      if (el.isVisible === false) {
-        el.isVisible = true;
-        el.isActive = true;
-        return el;
-      }
+    this.rootNodeId = 1;
+    this.items = JSON.parse(JSON.stringify(this.itemsOriginal));
+    this.resetGroupObjValues();
+    this.leafsValue = this.levels;
+    this.rootsValue = this.levels;
+  }
 
-      return el;
-    });
-
-    this.items = updatedTreeItems;
+  resetGroupObjValues() {
     this.groupsObject = this.groupsObject.map((group) => {
-      return { name: group.name, value: true };
+      return { name: group.name, value: true, color: group.color };
     });
   }
 
   changedGroupSelection(e: any) {
-    console.log(e);
+    this.rootNodeId = 1;
     const groupFound = this.groupsObject.find(
       (elem) => elem.name === e.target.id
     );
@@ -179,14 +184,97 @@ export class PocFiltersComponent {
     this.items = this.items.map((el: OrgItemConfig) => {
       if (el.groupTitle === group.name) {
         if (group.value) {
-          el.isVisible = true;
-          el.isActive = true;
+          return {
+            ...el,
+            isVisible: true,
+            isActive: true,
+          };
         } else {
-          el.isVisible = false;
-          el.isActive = false;
+          return {
+            ...el,
+            isVisible: false,
+            isActive: false,
+          };
         }
       }
       return el;
     });
+  }
+
+  selectNewRoot() {
+    const newRoot = this.itemsOriginal.find(
+      (item) => item.id === 'z' + this.rootNodeId
+    );
+    if (newRoot) {
+      this.items = [...this.rebuildTree([newRoot]), newRoot];
+    } else {
+      this.items = [];
+    }
+  }
+
+  rebuildTree(nodeList: OrgItemConfig[]): OrgItemConfig[] {
+    this.resetGroupObjValues();
+    this.rootsValue = this.levels;
+    this.leafsValue = this.levels;
+
+    const filtered = this.itemsOriginal.filter((item) => {
+      let returnVal = false;
+      nodeList.forEach((node) => {
+        if (node.id === item.parent) {
+          returnVal = true;
+        }
+      });
+      return returnVal;
+    });
+
+    console.log(filtered);
+
+    let recursiveVal: OrgItemConfig[] = [];
+
+    if (filtered.length) {
+      recursiveVal = this.rebuildTree(filtered);
+      console.log(recursiveVal);
+    }
+
+    return [
+      ...JSON.parse(JSON.stringify(nodeList)),
+      ...JSON.parse(JSON.stringify(recursiveVal)),
+    ];
+
+    //nodeList = [...nodeList, ...filtered, ]
+  }
+
+  onDownLevelBtnClick(item: OrgItemConfig) {
+    const newUniqueId = Date.now().toString();
+    this.items.push(
+      new OrgItemConfig({
+        id: newUniqueId,
+        parent: item.parent,
+        isVisible: false,
+        context: {
+          isMockItem: true,
+        },
+      })
+    );
+    item.parent = newUniqueId;
+  }
+
+  onUpLevelBtnClick(itemClicked: OrgItemConfig) {
+    let parentItem: null | OrgItemConfig = null;
+    const tempItems = this.items.filter((item: OrgItemConfig) => {
+      const returnVal = !(
+        item.id === itemClicked.parent && item.context.isMockItem
+      );
+      if (!returnVal) parentItem = { ...item };
+      return returnVal;
+    });
+    if (parentItem) {
+      this.items = tempItems.map((item: OrgItemConfig) => {
+        if (itemClicked.id === item.id) {
+          return { ...item, parent: parentItem!.parent };
+        }
+        return item;
+      });
+    }
   }
 }

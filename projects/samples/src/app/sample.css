@@ -115,10 +115,13 @@
 }
 
 .btn {
-  padding: 10px;
   border-radius: 5px;
+}
+
+.btn-spaced {
   border: none;
   margin: 0 4px;
+  padding: 10px;
 }
 
 .btn:hover {
@@ -148,4 +151,31 @@
 .centered {
   display: flex;
   align-items: center;
+}
+
+.mat-btn {
+  border: 1px solid gray;
+  background-color: rgb(251, 255, 128);
+}
+
+.mat-btn:hover {
+  background-color: rgb(248, 255, 33);
+}
+
+.groupItemCheckbox {
+  display: flex;
+  width: 120px;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 4px;
+}
+
+.input-root {
+  margin-right: 15px;
+  width: 50px;
+}
+
+.node-btn-group {
+  display: flex;
+  flex-direction: column;
 }
