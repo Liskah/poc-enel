@@ -3,6 +3,12 @@
 
     <div>
         <div class="pb centered">
+            <button id="savePDF" mat-icon-button aria-label="save pdf" (click)="savePDF()" class="mat-btn">
+                <mat-icon>download</mat-icon>
+            </button>
+            <label for="savePDF" style="padding-left: 5px;">Download pdf</label>
+        </div>
+        <div class="pb centered">
             <button id="resetTree" mat-icon-button aria-label="Reset tree" (click)="onResetBtnClick()" class="mat-btn">
                 <mat-icon>refresh</mat-icon>
             </button>
@@ -30,7 +36,7 @@
     </div>
 </div>
 
-<div class="graph">
+<div #orgDiagram class="graph dec-space" id="printcontent">
     <org-diagram 
         [annotations]="annotations"
         [items]="items"

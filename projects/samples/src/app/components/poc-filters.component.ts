@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import {
   AnnotationType,
   Colors,
@@ -11,7 +11,9 @@ import {
   Thickness,
 } from 'ngx-basic-primitives';
 
-// @ts-ignore
+import * as _html2canvas from 'html2canvas';
+import jspdf from 'jspdf';
+const html2canvas: any = _html2canvas;
 
 @Component({
   selector: 'app-poc-filters',
@@ -19,6 +21,8 @@ import {
   styleUrls: ['../sample.css'],
 })
 export class PocFiltersComponent {
+  @ViewChild('orgDiagram') orgDiagram!: ElementRef;
+
   PageFitMode = PageFitMode;
   Enabled = Enabled;
   GroupByType = GroupByType;
@@ -276,5 +280,49 @@ export class PocFiltersComponent {
         return item;
       });
     }
+  }
+
+  // Genearate Pdf using canvas return the generated pdf
+  private async generatePdf(): Promise<jspdf> {
+    const htmlElement = document.getElementById('printcontent');
+    const canvas = html2canvas(htmlElement, {
+      onrendered: function (canvas: any) {
+        document.body.appendChild(canvas);
+      },
+      allowTaint: true,
+      useCORS: true,
+      height: 10000,
+    });
+    //var imgWidth = 190;
+    var imgWidth = this.getWitdh();
+    var imgHeight = ((await canvas).height * imgWidth) / (await canvas).width;
+    const pdf = new jspdf();
+    pdf.addImage(
+      (await canvas).toDataURL('image/png'),
+      'PNG',
+      10,
+      10,
+      imgWidth,
+      imgHeight
+    );
+    return pdf;
+  }
+
+  async savePDF() {
+    console.log('Downloading... ');
+    const pdf = await this.generatePdf();
+    pdf.save('diagram.pdf');
+  }
+
+  getWitdh(): number {
+    const diagram = this.orgDiagram.nativeElement;
+    const childElements = diagram.querySelectorAll('.mouse-panel');
+    let width = 0;
+    childElements.forEach((child: Element) => {
+      // Use offsetWidth to get the width of each element
+      width = (child as HTMLElement).offsetWidth;
+      console.log('Width of element:', width);
+    });
+    return width;
   }
 }
