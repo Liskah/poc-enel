@@ -38,6 +38,8 @@ export class PocFiltersComponent {
   rootNodeId = 1;
   groupsCategory = ['DI', 'SNC', 'SAS', 'SPA', 'SRL', 'COOP'];
 
+  diagramScale: number = 1;
+
   groupsObject: { name: string; value: boolean; color: string }[] =
     this.groupsCategory.map((elem, index) => {
       return {
@@ -284,7 +286,7 @@ export class PocFiltersComponent {
 
   // Genearate Pdf using canvas return the generated pdf
   private async generatePdf(): Promise<jspdf> {
-    const htmlElement = document.getElementById('printcontent');
+    const htmlElement = document.getElementById('printcontent'); 
     const canvas = html2canvas(htmlElement, {
       onrendered: function (canvas: any) {
         document.body.appendChild(canvas);
@@ -293,25 +295,31 @@ export class PocFiltersComponent {
       useCORS: true,
       height: 10000,
     });
-    //var imgWidth = 190;
-    var imgWidth = this.getWitdh();
+    var imgWidth = 190;
     var imgHeight = ((await canvas).height * imgWidth) / (await canvas).width;
     const pdf = new jspdf();
+
     pdf.addImage(
       (await canvas).toDataURL('image/png'),
       'PNG',
       10,
       10,
       imgWidth,
-      imgHeight
+      imgHeight,
     );
     return pdf;
   }
 
   async savePDF() {
-    console.log('Downloading... ');
-    const pdf = await this.generatePdf();
-    pdf.save('diagram.pdf');
+    const screenWidth = this.orgDiagram.nativeElement.offsetWidth;
+    const diagramWidth = this.getWitdh();
+    this.diagramScale = screenWidth / diagramWidth;
+
+    setTimeout(async() => {
+      const pdf = await this.generatePdf();
+      pdf.save('diagram.pdf');
+      this.diagramScale = 1;
+    }, 1000)
   }
 
   getWitdh(): number {
