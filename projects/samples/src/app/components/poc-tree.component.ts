@@ -10,7 +10,6 @@ import {
 
 import { mockData } from '../mock-data/mock-data';
 // @ts-ignore
-
 @Component({
   selector: 'app-poc-tree',
   templateUrl: './poc-tree.component.html',
@@ -22,7 +21,6 @@ export class PocTreeComponent {
   GroupByType = GroupByType;
 
   items: OrgItemConfig[] = [];
-  //annotations: LabelAnnotationConfig[] = [];
   showLegend: boolean = false;
   legendItems: { name: string; color: string }[] = [];
   jsonTextArea = '';
@@ -35,7 +33,6 @@ export class PocTreeComponent {
   calculateGraph(json: any) {
     const parents = new Set<string>([]);
     this.items = [];
-    //this.annotations = [];
 
     json.forEach((element: any) => {
       const azionisti: any = [];
@@ -77,7 +74,6 @@ export class PocTreeComponent {
 
           this.items = [...this.items, graphItem];
           parents.add(this.truncateId(id));
-          console.log(graphItem);
         }
       });
 
@@ -93,30 +89,11 @@ export class PocTreeComponent {
           image: `./assets/photos/${valuta.slice(0, 1).toLowerCase()}.png`,
           itemTitleColor: colorItem,
         });
-        console.log(gItem);
         gItems.push(gItem);
-
-        const annotationGraphItem = new LabelAnnotationConfig({
-          annotationType: AnnotationType.Label,
-          fromItem: gItem.id as string,
-          toItems: [azionista.id],
-          title: azionista.percentualeDetenuta + '% ',
-        });
-
-        //this.annotations = [...this.annotations, annotationGraphItem];
-        console.log(annotationGraphItem);
       });
 
       this.items = [...this.items, ...gItems];
     });
-
-    setTimeout(() => {
-      /*this.items = this.items.filter((item: OrgItemConfig) => {
-        console.log(item);
-        return item.levelOffset && item.levelOffset < 3;
-      });*/
-      console.log(this.items);
-    }, 5000);
   }
 
   truncateId(id: number | string | null): string {

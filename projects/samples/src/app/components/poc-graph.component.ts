@@ -79,7 +79,6 @@ export class PocGraphComponent {
 
           this.items = [...this.items, graphItem];
           parents.add(this.truncateId(id));
-          console.log(graphItem);
         }
       });
 
@@ -93,7 +92,6 @@ export class PocGraphComponent {
         image: `./assets/photos/${valuta.slice(0, 1).toLowerCase()}.png`,
         itemTitleColor: colorItem,
       });
-      console.log(gItem);
 
       azionisti.forEach((azionista: any) => {
         const annotationGraphItem = new LabelAnnotationConfig({
@@ -104,7 +102,6 @@ export class PocGraphComponent {
         });
 
         this.annotations = [...this.annotations, annotationGraphItem];
-        console.log(annotationGraphItem);
       });
 
       this.items = [...this.items, gItem];
