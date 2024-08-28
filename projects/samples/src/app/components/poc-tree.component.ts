@@ -33,7 +33,7 @@ export class PocTreeComponent {
   }
 
   calculateGraph(json: any) {
-    const parents = new Set<string>([]);
+    const addedNodes = new Set<string>([]);
     this.items = [];
 
     json.forEach((element: any) => {
@@ -57,7 +57,7 @@ export class PocTreeComponent {
           percentualeDetenuta: Math.round(azionista.percentualeDetenuta),
         });
 
-        if (parents.has(id)) {
+        if (addedNodes.has(id)) {
         } else {
           const graphItem = new OrgItemConfig({
             id: id,
@@ -75,23 +75,27 @@ export class PocTreeComponent {
           });
 
           this.items = [...this.items, graphItem];
-          parents.add(Utils.truncateId(id));
+          addedNodes.add(id);
         }
       });
 
       const companyId = Utils.truncateId(element.idCompany);
       const gItems: OrgItemConfig[] = [];
       azionisti.forEach((azionista: any) => {
-        const gItem = new OrgItemConfig({
-          id: companyId,
-          parent: azionista.id,
-          title: valuta,
-          label: 'Corp ' + companyId,
-          description: 'Parent ' + companyId,
-          image: `./assets/photos/${valuta.slice(0, 1).toLowerCase()}.png`,
-          itemTitleColor: colorItem,
-        });
-        gItems.push(gItem);
+        if (addedNodes.has(companyId)) {
+        } else {
+          const gItem = new OrgItemConfig({
+            id: companyId,
+            parent: azionista.id,
+            title: valuta,
+            label: 'Corp ' + companyId,
+            description: 'Parent ' + companyId,
+            image: `./assets/photos/${valuta.slice(0, 1).toLowerCase()}.png`,
+            itemTitleColor: colorItem,
+          });
+          gItems.push(gItem);
+          addedNodes.add(companyId);
+        }
       });
 
       this.items = [...this.items, ...gItems];
@@ -113,10 +117,14 @@ export class PocTreeComponent {
     this.errorMsg = '';
   }
 
-  onRightBtnClick(nodeClicked: OrgItemConfig) {
+  onMoveNodeBtnClick(nodeClicked: OrgItemConfig, isLeft: boolean) {
     let startSearch = false;
     let parentOfClickedNode: OrgItemConfig | null | undefined = null;
-    for (let i = 0; i < this.items.length; i++) {
+    for (
+      let i = isLeft ? this.items.length - 1 : 0;
+      isLeft ? i >= 0 : i < this.items.length;
+      isLeft ? i-- : i++
+    ) {
       console.log(i, this.items[i].id);
       if (startSearch && this.items[i].parent === null) {
         parentOfClickedNode = this.items[i];
@@ -144,47 +152,7 @@ export class PocTreeComponent {
         if (parentOfClickedNode && item.id === nodeClicked.id) {
           setTimeout(() => {
             this.cursorItem = nodeClicked.id!.toString();
-          }, 2000);
-          return { ...parentOfClickedNode } as OrgItemConfig;
-        }
-        return item as OrgItemConfig;
-      });
-    }
-  }
-
-  onLeftBtnClick(nodeClicked: OrgItemConfig) {
-    let startSearch = false;
-    let parentOfClickedNode: OrgItemConfig | null | undefined = null;
-    for (let i = this.items.length - 1; i >= 0; i--) {
-      console.log(i, this.items[i].id);
-      if (startSearch && this.items[i].parent === null) {
-        parentOfClickedNode = this.items[i];
-        if (parentOfClickedNode) {
-          this.cursorItem = parentOfClickedNode.id!.toString();
-        }
-        console.log(parentOfClickedNode);
-        break;
-      }
-      if (
-        this.items[i].id === nodeClicked.id &&
-        this.items[i].parent === null
-      ) {
-        console.log(nodeClicked);
-        console.log(this.items[i]);
-        startSearch = true;
-      }
-    }
-
-    if (parentOfClickedNode) {
-      this.items = this.items.map((item: OrgItemConfig) => {
-        if (parentOfClickedNode && item.id === parentOfClickedNode.id) {
-          return { ...nodeClicked };
-        }
-        if (parentOfClickedNode && item.id === nodeClicked.id) {
-          setTimeout(() => {
-            this.cursorItem = '';
-            this.cursorItem = nodeClicked.id!.toString();
-          }, 2000);
+          }, 50);
           return { ...parentOfClickedNode } as OrgItemConfig;
         }
         return item as OrgItemConfig;

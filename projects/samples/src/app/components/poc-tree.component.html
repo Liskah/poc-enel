@@ -35,8 +35,8 @@
 
     <ng-template #buttonsTemplate let-itemConfig="context">
         <div class="node-btn-group" *ngIf="itemConfig.parent === null">
-            <mat-icon class="btn" (click)="onLeftBtnClick(itemConfig)">keyboard_arrow_left</mat-icon>
-            <mat-icon class="btn" (click)="onRightBtnClick(itemConfig)">keyboard_arrow_right</mat-icon>
+            <mat-icon class="btn" (click)="onMoveNodeBtnClick(itemConfig, true)">keyboard_arrow_left</mat-icon>
+            <mat-icon class="btn" (click)="onMoveNodeBtnClick(itemConfig, false)">keyboard_arrow_right</mat-icon>
         </div>
     </ng-template>
 
