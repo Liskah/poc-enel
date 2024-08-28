@@ -36,6 +36,21 @@
     </div>
 </div>
 
+<div>
+    <button class="box-margin" mat-fab extended color="success" (click)="saveTree()">
+        <mat-icon>save</mat-icon>
+        Salva albero
+    </button>
+    <button class="box-margin" mat-fab extended color="primary" (click)="loadTree()" [disabled]="disabledLoad" [ngClass]="{'disabled': disabledLoad}">
+        <mat-icon>publish</mat-icon>
+        Carica albero
+    </button>
+    <button class="box-margin" mat-fab extended color="danger" (click)="deleteTree()" [disabled]="disabledLoad" [ngClass]="{'disabled': disabledLoad}">
+        <mat-icon>delete</mat-icon>
+        Elimina albero salvato
+    </button>
+</div>
+
 <div #orgDiagram class="graph dec-space" id="printcontent">
     <org-diagram 
         [annotations]="annotations"

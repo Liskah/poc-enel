@@ -1,4 +1,6 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
+import * as _html2canvas from 'html2canvas';
+import jspdf from 'jspdf';
 import {
   AnnotationType,
   Colors,
@@ -10,8 +12,6 @@ import {
   PageFitMode,
   Thickness,
 } from 'ngx-basic-primitives';
-import * as _html2canvas from 'html2canvas';
-import jspdf from 'jspdf';
 const html2canvas: any = _html2canvas;
 
 @Component({
@@ -48,9 +48,14 @@ export class PocFiltersComponent {
       };
     });
 
+  localStorageKey = 'poc-filters-tree';
+  disabledLoad = true;
+
   ngOnInit(): void {
     this.items = this.generateTree(this.levels);
     this.itemsOriginal = JSON.parse(JSON.stringify(this.items));
+
+    this.disabledLoad = !this.checkSavedTree();
   }
 
   generateTree(n: number) {
@@ -284,7 +289,7 @@ export class PocFiltersComponent {
 
   // Genearate Pdf using canvas return the generated pdf
   private async generatePdf(): Promise<jspdf> {
-    const htmlElement = document.getElementById('printcontent'); 
+    const htmlElement = document.getElementById('printcontent');
     const canvas = html2canvas(htmlElement, {
       onrendered: function (canvas: any) {
         document.body.appendChild(canvas);
@@ -303,7 +308,7 @@ export class PocFiltersComponent {
       10,
       10,
       imgWidth,
-      imgHeight,
+      imgHeight
     );
     return pdf;
   }
@@ -313,11 +318,11 @@ export class PocFiltersComponent {
     const diagramWidth = this.getWitdh();
     this.diagramScale = screenWidth / diagramWidth;
 
-    setTimeout(async() => {
+    setTimeout(async () => {
       const pdf = await this.generatePdf();
       pdf.save('diagram.pdf');
       this.diagramScale = 1;
-    }, 1000)
+    }, 1000);
   }
 
   getWitdh(): number {
@@ -330,5 +335,32 @@ export class PocFiltersComponent {
       console.log('Width of element:', width);
     });
     return width;
+  }
+
+  saveTree() {
+    localStorage.setItem(this.localStorageKey, JSON.stringify(this.items));
+    this.items && this.items.length
+      ? (this.disabledLoad = false)
+      : (this.disabledLoad = true);
+  }
+
+  loadTree() {
+    const item = localStorage.getItem(this.localStorageKey);
+    if (item) {
+      this.items = JSON.parse(item);
+    }
+  }
+
+  checkSavedTree(): boolean {
+    let pippo = localStorage.getItem(this.localStorageKey);
+    if (pippo) {
+      pippo = JSON.parse(pippo);
+    }
+    return pippo && pippo.length > 0 ? true : false;
+  }
+
+  deleteTree() {
+    localStorage.removeItem(this.localStorageKey);
+    this.disabledLoad = true;
   }
 }
