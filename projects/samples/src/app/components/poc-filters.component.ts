@@ -10,7 +10,6 @@ import {
   PageFitMode,
   Thickness,
 } from 'ngx-basic-primitives';
-
 import * as _html2canvas from 'html2canvas';
 import jspdf from 'jspdf';
 const html2canvas: any = _html2canvas;
@@ -48,7 +47,6 @@ export class PocFiltersComponent {
         color: Object.keys(Colors)[index + 20],
       };
     });
-  //annotations: LabelAnnotationConfig[] = [];
 
   ngOnInit(): void {
     this.items = this.generateTree(this.levels);
