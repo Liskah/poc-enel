@@ -1,14 +1,13 @@
 import { Component } from '@angular/core';
 import {
-  AnnotationType,
   Enabled,
   GroupByType,
-  LabelAnnotationConfig,
   OrgItemConfig,
   PageFitMode,
 } from 'ngx-basic-primitives';
 
 import { mockData } from '../mock-data/mock-data';
+import { Utils } from '../utils/utils.component';
 // @ts-ignore
 @Component({
   selector: 'app-poc-tree',
@@ -37,7 +36,7 @@ export class PocTreeComponent {
     json.forEach((element: any) => {
       const azionisti: any = [];
       const valuta = element.azioniModel[0].valuta;
-      const colorItem = this.generateHexColorFromString(valuta);
+      const colorItem = Utils.generateHexColorFromString(valuta);
 
       let result = true;
       this.legendItems.forEach((el) => {
@@ -49,7 +48,7 @@ export class PocTreeComponent {
       if (result) this.legendItems.push({ name: valuta, color: colorItem });
 
       element.azionistiModel.forEach((azionista: any) => {
-        const id = this.truncateId(azionista.idAzionista);
+        const id = Utils.truncateId(azionista.idAzionista);
         azionisti.push({
           id: id,
           percentualeDetenuta: Math.round(azionista.percentualeDetenuta),
@@ -73,11 +72,11 @@ export class PocTreeComponent {
           });
 
           this.items = [...this.items, graphItem];
-          parents.add(this.truncateId(id));
+          parents.add(Utils.truncateId(id));
         }
       });
 
-      const companyId = this.truncateId(element.idCompany);
+      const companyId = Utils.truncateId(element.idCompany);
       const gItems: OrgItemConfig[] = [];
       azionisti.forEach((azionista: any) => {
         const gItem = new OrgItemConfig({
@@ -94,29 +93,6 @@ export class PocTreeComponent {
 
       this.items = [...this.items, ...gItems];
     });
-  }
-
-  truncateId(id: number | string | null): string {
-    if (id && id !== 0) {
-      return id.toString().slice(-8);
-    }
-    return '';
-  }
-
-  generateHexColorFromString(input: string): string {
-    let hash = 0;
-    for (let i = 0; i < input.length; i++) {
-      hash = input.charCodeAt(i) + ((hash << 5) - hash);
-    }
-
-    // Convert the hash to a hex color
-    let color = '#';
-    for (let i = 0; i < 3; i++) {
-      const value = (hash >> (i * 8)) & 0xff;
-      color += ('00' + value.toString(16)).slice(-2);
-    }
-
-    return color;
   }
 
   onJsonSubmit() {
