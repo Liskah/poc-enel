@@ -14,7 +14,7 @@
     <org-diagram 
         [items]="items"
         [pageFitMode]=PageFitMode.None
-        [cursorItem]=1
+        [cursorItem]=cursorItem
         [linesWidth]=1
         [arrowsDirection]=GroupByType.Children
         [showExtraArrows]=true
@@ -27,9 +27,18 @@
         [lineItemsInterval]=30
         [hasSelectorCheckbox]=Enabled.False
         [centerOnCursor]=true
+        [buttonsTemplate]="buttonsTemplate"
+        [buttonsPanelSize]=40
+        [hasButtons]=Enabled.True
     >
     </org-diagram>
 
+    <ng-template #buttonsTemplate let-itemConfig="context">
+        <div class="node-btn-group" *ngIf="itemConfig.parent === null">
+            <mat-icon class="btn" (click)="onLeftBtnClick(itemConfig)">keyboard_arrow_left</mat-icon>
+            <mat-icon class="btn" (click)="onRightBtnClick(itemConfig)">keyboard_arrow_right</mat-icon>
+        </div>
+    </ng-template>
 
     <div class="legend">
         <div class="legend-button">

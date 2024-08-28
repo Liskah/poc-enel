@@ -1,9 +1,7 @@
 import { Component } from '@angular/core';
 import {
-  AnnotationType,
   Enabled,
   GroupByType,
-  LabelAnnotationConfig,
   OrgItemConfig,
   PageFitMode,
 } from 'ngx-basic-primitives';
@@ -20,6 +18,8 @@ export class PocTreeComponent {
   Enabled = Enabled;
   GroupByType = GroupByType;
 
+  cursorItem = 'z1';
+
   items: OrgItemConfig[] = [];
   showLegend: boolean = false;
   legendItems: { name: string; color: string }[] = [];
@@ -28,6 +28,7 @@ export class PocTreeComponent {
 
   ngOnInit(): void {
     this.calculateGraph(mockData);
+    console.log(this.items);
   }
 
   calculateGraph(json: any) {
@@ -132,5 +133,84 @@ export class PocTreeComponent {
   onJsonReset() {
     this.jsonTextArea = '';
     this.errorMsg = '';
+  }
+
+  onRightBtnClick(nodeClicked: OrgItemConfig) {
+    let startSearch = false;
+    let parentOfClickedNode: OrgItemConfig | null | undefined = null;
+    for (let i = 0; i < this.items.length; i++) {
+      console.log(i, this.items[i].id);
+      if (startSearch && this.items[i].parent === null) {
+        parentOfClickedNode = this.items[i];
+        if (parentOfClickedNode) {
+          this.cursorItem = parentOfClickedNode.id!.toString();
+        }
+        console.log(parentOfClickedNode);
+        break;
+      }
+      if (
+        this.items[i].id === nodeClicked.id &&
+        this.items[i].parent === null
+      ) {
+        console.log(nodeClicked);
+        console.log(this.items[i]);
+        startSearch = true;
+      }
+    }
+
+    if (parentOfClickedNode) {
+      this.items = this.items.map((item: OrgItemConfig) => {
+        if (parentOfClickedNode && item.id === parentOfClickedNode.id) {
+          return { ...nodeClicked };
+        }
+        if (parentOfClickedNode && item.id === nodeClicked.id) {
+          setTimeout(() => {
+            this.cursorItem = nodeClicked.id!.toString();
+          }, 2000);
+          return { ...parentOfClickedNode } as OrgItemConfig;
+        }
+        return item as OrgItemConfig;
+      });
+    }
+  }
+
+  onLeftBtnClick(nodeClicked: OrgItemConfig) {
+    let startSearch = false;
+    let parentOfClickedNode: OrgItemConfig | null | undefined = null;
+    for (let i = this.items.length - 1; i >= 0; i--) {
+      console.log(i, this.items[i].id);
+      if (startSearch && this.items[i].parent === null) {
+        parentOfClickedNode = this.items[i];
+        if (parentOfClickedNode) {
+          this.cursorItem = parentOfClickedNode.id!.toString();
+        }
+        console.log(parentOfClickedNode);
+        break;
+      }
+      if (
+        this.items[i].id === nodeClicked.id &&
+        this.items[i].parent === null
+      ) {
+        console.log(nodeClicked);
+        console.log(this.items[i]);
+        startSearch = true;
+      }
+    }
+
+    if (parentOfClickedNode) {
+      this.items = this.items.map((item: OrgItemConfig) => {
+        if (parentOfClickedNode && item.id === parentOfClickedNode.id) {
+          return { ...nodeClicked };
+        }
+        if (parentOfClickedNode && item.id === nodeClicked.id) {
+          setTimeout(() => {
+            this.cursorItem = '';
+            this.cursorItem = nodeClicked.id!.toString();
+          }, 2000);
+          return { ...parentOfClickedNode } as OrgItemConfig;
+        }
+        return item as OrgItemConfig;
+      });
+    }
   }
 }
