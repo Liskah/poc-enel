@@ -151,13 +151,13 @@ export class PocTreeComponent {
               new ConnectorAnnotationConfig({
                 annotationType: AnnotationType.Connector,
                 fromItem: nodeId,
-                toItem: itemFound.id,
+                toItem: Utils.truncateId(itemFound.id),
                 label: '',
                 size: new Size(40, 20),
                 connectorShapeType: ConnectorShapeType.OneWay,
                 color: Colors.Green,
                 offset: 0,
-                lineWidth: 1,
+                lineWidth: 0,
                 lineType: LineType.Solid,
                 connectorPlacementType: ConnectorPlacementType.Straight,
                 selectItems: false,
@@ -270,4 +270,20 @@ export class PocTreeComponent {
     localStorage.removeItem(this.localStorageKey);
     this.disabledLoad = true;
   }
+
+  onCursorChanged(event: any) {
+    const { context: item } = event;
+
+    if (item) {
+      let annotationsFound = this.annotations.filter((annotation: ConnectorAnnotationConfig) => {
+        return annotation.fromItem === item.id || annotation.toItem === item.id
+      })
+
+      annotationsFound.forEach((annotation: ConnectorAnnotationConfig) => {
+        annotation.lineWidth = 1;
+      })
+    }
+
+    
+  };
 }

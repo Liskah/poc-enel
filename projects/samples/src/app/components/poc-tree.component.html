@@ -44,6 +44,7 @@
         [buttonsTemplate]="buttonsTemplate"
         [buttonsPanelSize]=0
         [hasButtons]=Enabled.True
+        (onCursorChanged)="onCursorChanged($event)"
     >
     </org-diagram>
 
@@ -53,6 +54,7 @@
             <mat-icon class="btn" (click)="onMoveNodeBtnClick(itemConfig, false)">keyboard_arrow_right</mat-icon>
         </div>
     </ng-template>
+
 
     <div class="legend">
         <div class="legend-button">
