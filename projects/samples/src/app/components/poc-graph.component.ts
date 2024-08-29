@@ -28,8 +28,12 @@ export class PocGraphComponent {
   jsonTextArea = '';
   errorMsg = '';
 
+  localStorageKey = 'poc-graph';
+  disabledLoad = true;
+
   ngOnInit(): void {
     this.calculateGraph(mockData);
+    this.disabledLoad = !this.checkSavedTree();
   }
 
   calculateGraph(json: any) {
@@ -121,5 +125,42 @@ export class PocGraphComponent {
   onJsonReset() {
     this.jsonTextArea = '';
     this.errorMsg = '';
+  }
+
+  saveTree() {
+    localStorage.setItem(this.localStorageKey, JSON.stringify({items: this.items, annotations: this.annotations}));
+    this.items && this.items.length
+      ? (this.disabledLoad = false)
+      : (this.disabledLoad = true);
+    
+  }
+
+  loadTree() {
+    const storedItem = localStorage.getItem(this.localStorageKey);
+
+    if (storedItem) {
+      const {items, annotations} = JSON.parse(storedItem);
+      this.items = items.map((storageItem: any) => {
+        return new FamItemConfig({...storageItem});
+      });
+      this.annotations = annotations.map((storageAnnotation: any) => {
+        return new LabelAnnotationConfig({...storageAnnotation});
+      });
+    }
+  }
+
+  deleteTree() {
+    localStorage.removeItem(this.localStorageKey);
+    this.disabledLoad = true;
+  }
+
+  checkSavedTree(): boolean {
+    let storageItem = localStorage.getItem(this.localStorageKey);
+    let items;
+
+    if (storageItem) {
+      items = JSON.parse(storageItem);
+    }
+    return storageItem && items.items && items.items.length > 0 ? true : false;
   }
 }
