@@ -1,9 +1,16 @@
 import { Component } from '@angular/core';
 import {
+  AnnotationType,
+  Colors,
+  ConnectorAnnotationConfig,
+  ConnectorPlacementType,
+  ConnectorShapeType,
   Enabled,
   GroupByType,
+  LineType,
   OrgItemConfig,
   PageFitMode,
+  Size,
 } from 'ngx-basic-primitives';
 
 import { mockData } from '../mock-data/mock-data';
@@ -21,6 +28,7 @@ export class PocTreeComponent {
 
   cursorItem = 'z1';
 
+  annotations: ConnectorAnnotationConfig[] = [];
   items: OrgItemConfig[] = [];
   showLegend: boolean = false;
   legendItems: { name: string; color: string }[] = [];
@@ -28,7 +36,8 @@ export class PocTreeComponent {
   errorMsg = '';
 
   ngOnInit(): void {
-    this.calculateGraph(mockData);
+    //this.calculateGraph(mockData);
+    this.createDiagram(mockData);
     console.log(this.items);
   }
 
@@ -54,7 +63,8 @@ export class PocTreeComponent {
         const id = Utils.truncateId(azionista.idAzionista);
         azionisti.push({
           id: id,
-          percentualeDetenuta: Math.round(azionista.percentualeDetenuta),
+          percentualeDetenuta:
+            Math.floor(azionista.percentualeDetenuta * 100) / 100,
         });
 
         if (addedNodes.has(id)) {
@@ -100,6 +110,75 @@ export class PocTreeComponent {
 
       this.items = [...this.items, ...gItems];
     });
+  }
+
+  createDiagram(json: any) {
+    this.items = [];
+
+    for (let i = 0; i < json.length; i++) {
+      const jsonItem = json[i];
+      const nodeId = Utils.truncateId(jsonItem.idCompany);
+
+      this.items.push(
+        new OrgItemConfig({
+          id: nodeId,
+          label: 'Corp ' + nodeId,
+          description: 'Parent ' + nodeId,
+          image: `./assets/photos/c.png`,
+          //context: { itself: jsonItem },
+        })
+      );
+    }
+
+    for (let i = 0; i < json.length; i++) {
+      const jsonItem = json[i];
+      const nodeId = Utils.truncateId(jsonItem.idCompany);
+
+      for (let j = 0; j < jsonItem.azionistiModel.length; j++) {
+        const azionista = jsonItem.azionistiModel[j];
+        const azionistaId = Utils.truncateId(azionista.idAzionista);
+        const itemFound = this.items.find((item: OrgItemConfig) => {
+          return item.id === azionistaId;
+        });
+        if (itemFound) {
+          if (!itemFound.parent) {
+            itemFound.parent = nodeId;
+          } else {
+            // già esiste il collegamento e possiamo solo usare i label (albero non grafo)
+            this.annotations.push(
+              new ConnectorAnnotationConfig({
+                annotationType: AnnotationType.Connector,
+                fromItem: nodeId,
+                toItem: itemFound.id,
+                label: '',
+                size: new Size(40, 20),
+                connectorShapeType: ConnectorShapeType.OneWay,
+                color: Colors.Green,
+                offset: 0,
+                lineWidth: 1,
+                lineType: LineType.Solid,
+                connectorPlacementType: ConnectorPlacementType.Straight,
+                selectItems: false,
+              })
+            );
+          }
+        } else {
+          this.items.push(
+            new OrgItemConfig({
+              id: azionistaId,
+              label: 'Corp ' + azionistaId,
+              description: 'Azionista ' + azionistaId,
+              image: `./assets/photos/a.png`,
+              itemTitleColor: 'red',
+              parent: nodeId,
+              //context: { itself: jsonItem },
+            })
+          );
+        }
+
+        console.log(itemFound);
+      }
+    }
   }
 
   onJsonSubmit() {

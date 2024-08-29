@@ -59,7 +59,8 @@ export class PocGraphComponent {
         const id = Utils.truncateId(azionista.idAzionista);
         azionisti.push({
           id: id,
-          percentualeDetenuta: Math.round(azionista.percentualeDetenuta),
+          percentualeDetenuta:
+            Math.floor(azionista.percentualeDetenuta * 100) / 100,
         });
 
         if (parents.has(id)) {
@@ -108,7 +109,6 @@ export class PocGraphComponent {
       });
 
       this.items = [...this.items, gItem];
-
     });
   }
 
