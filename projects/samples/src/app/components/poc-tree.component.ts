@@ -35,10 +35,12 @@ export class PocTreeComponent {
   jsonTextArea = '';
   errorMsg = '';
 
+  localStorageKey = 'poc-tree';
+  disabledLoad = true;
+
   ngOnInit(): void {
-    //this.calculateGraph(mockData);
     this.createDiagram(mockData);
-    console.log(this.items);
+    this.disabledLoad = !this.checkSavedTree();
   }
 
   calculateGraph(json: any) {
@@ -175,8 +177,6 @@ export class PocTreeComponent {
             })
           );
         }
-
-        console.log(itemFound);
       }
     }
   }
@@ -204,21 +204,17 @@ export class PocTreeComponent {
       isLeft ? i >= 0 : i < this.items.length;
       isLeft ? i-- : i++
     ) {
-      console.log(i, this.items[i].id);
       if (startSearch && this.items[i].parent === null) {
         parentOfClickedNode = this.items[i];
         if (parentOfClickedNode) {
           this.cursorItem = parentOfClickedNode.id!.toString();
         }
-        console.log(parentOfClickedNode);
         break;
       }
       if (
         this.items[i].id === nodeClicked.id &&
         this.items[i].parent === null
       ) {
-        console.log(nodeClicked);
-        console.log(this.items[i]);
         startSearch = true;
       }
     }
@@ -237,5 +233,41 @@ export class PocTreeComponent {
         return item as OrgItemConfig;
       });
     }
+  }
+
+  saveTree() {
+    localStorage.setItem(this.localStorageKey, JSON.stringify({items: this.items, annotations: this.annotations}));
+    this.items && this.items.length
+      ? (this.disabledLoad = false)
+      : (this.disabledLoad = true);
+  }
+
+  loadTree() {
+    const storedItem = localStorage.getItem(this.localStorageKey);
+
+    if (storedItem) {
+      const {items, annotations} = JSON.parse(storedItem);
+      this.items = items.map((storageItem: any) => {
+        return new OrgItemConfig({...storageItem});
+      });
+      this.annotations = annotations.map((storageAnnotation: any) => {
+        return new ConnectorAnnotationConfig({...storageAnnotation});
+      });
+    }
+  }
+
+  checkSavedTree(): boolean {
+    let storageItem = localStorage.getItem(this.localStorageKey);
+    let items;
+
+    if (storageItem) {
+      items = JSON.parse(storageItem);
+    }
+    return storageItem && items.items && items.items.length > 0 ? true : false;
+  }
+
+  deleteTree() {
+    localStorage.removeItem(this.localStorageKey);
+    this.disabledLoad = true;
   }
 }

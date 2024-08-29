@@ -236,13 +236,10 @@ export class PocFiltersComponent {
       return returnVal;
     });
 
-    console.log(filtered);
-
     let recursiveVal: OrgItemConfig[] = [];
 
     if (filtered.length) {
       recursiveVal = this.rebuildTree(filtered);
-      console.log(recursiveVal);
     }
 
     return [
@@ -332,7 +329,6 @@ export class PocFiltersComponent {
     childElements.forEach((child: Element) => {
       // Use offsetWidth to get the width of each element
       width = (child as HTMLElement).offsetWidth;
-      console.log('Width of element:', width);
     });
     return width;
   }

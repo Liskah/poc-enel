@@ -8,7 +8,20 @@
         <button class="btn btn-spaced submitBtn" (click)="onJsonSubmit()">Genera</button>
     </div>
 </div>
-
+<div class="padding-top-bottom">
+    <button class="box-margin" mat-fab extended color="success" (click)="saveTree()">
+        <mat-icon>save</mat-icon>
+        Salva albero
+    </button>
+    <button class="box-margin" mat-fab extended color="primary" (click)="loadTree()" [disabled]="disabledLoad" [ngClass]="{'disabled': disabledLoad}">
+        <mat-icon>publish</mat-icon>
+        Carica albero
+    </button>
+    <button class="box-margin" mat-fab extended color="danger" (click)="deleteTree()" [disabled]="disabledLoad" [ngClass]="{'disabled': disabledLoad}">
+        <mat-icon>delete</mat-icon>
+        Elimina albero salvato
+    </button>
+</div>
 
 <div class="graph" *ngIf="!errorMsg">
     <org-diagram 

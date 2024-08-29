@@ -230,3 +230,7 @@
 .disabled {
   background-color: grey;
 }
+
+.padding-top-bottom {
+  padding: 10px 0;
+}
