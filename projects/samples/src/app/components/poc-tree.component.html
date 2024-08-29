@@ -1,4 +1,4 @@
-<h1>Matrix Nodes Layout in Family Chart</h1>
+<h1>Albero ricavato dai dati reali</h1>
 <div class="flex-container justify">
     <div class="flex-child-3">
         <textarea class="textarea" placeholder="Incolla qui il tuo json . . ." [(ngModel)]="jsonTextArea"></textarea>
@@ -58,14 +58,11 @@
 
     <div class="legend">
         <div class="legend-button">
-            <div *ngIf="showLegend" class="legend-content">
-                <div *ngFor="let item of legendItems" class="legend-item-wrapper flex-container">
-                    {{item.name}}
-                   <div [ngStyle]="{'background-color': item.color}" class="legend-item"></div>
+            <div *ngIf="selectedAnnotations.length > 0" class="legend-content">
+                <div class="btn parentLegendItem no-wrap-text" (click)="onParentNodeClick()">↻ {{nodeClickedId}}</div>
+                <div *ngFor="let item of selectedAnnotations" class="legend-item-wrapper flex-container no-wrap-text btn" (click)="onLegendAnnotationClicked(item)">
+                    {{getConnectorString(item)}}
                 </div>
-            </div>
-            <div class="legend-on-over" (mouseenter)="showLegend = true" (mouseleave)="showLegend = false">
-                LEGEND
             </div>
         </div>
     </div>

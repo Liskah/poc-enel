@@ -198,7 +198,7 @@ const routes: Routes = [
   { path: 'examplegraph', component: PocGraphComponent },
   { path: 'exampletree', component: PocTreeComponent },
   { path: 'examplefilters', component: PocFiltersComponent },
-  { path: '', redirectTo: '/firstorganizationalchart', pathMatch: 'full' },
+  { path: '', redirectTo: '/examplefilters', pathMatch: 'full' },
 ];
 
 @NgModule({

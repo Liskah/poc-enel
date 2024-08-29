@@ -38,6 +38,9 @@ export class PocTreeComponent {
   localStorageKey = 'poc-tree';
   disabledLoad = true;
 
+  selectedAnnotations: ConnectorAnnotationConfig[] = [];
+  nodeClickedId: string = '';
+
   ngOnInit(): void {
     this.createDiagram(mockData);
     this.disabledLoad = !this.checkSavedTree();
@@ -236,7 +239,10 @@ export class PocTreeComponent {
   }
 
   saveTree() {
-    localStorage.setItem(this.localStorageKey, JSON.stringify({items: this.items, annotations: this.annotations}));
+    localStorage.setItem(
+      this.localStorageKey,
+      JSON.stringify({ items: this.items, annotations: this.annotations })
+    );
     this.items && this.items.length
       ? (this.disabledLoad = false)
       : (this.disabledLoad = true);
@@ -246,12 +252,12 @@ export class PocTreeComponent {
     const storedItem = localStorage.getItem(this.localStorageKey);
 
     if (storedItem) {
-      const {items, annotations} = JSON.parse(storedItem);
+      const { items, annotations } = JSON.parse(storedItem);
       this.items = items.map((storageItem: any) => {
-        return new OrgItemConfig({...storageItem});
+        return new OrgItemConfig({ ...storageItem });
       });
       this.annotations = annotations.map((storageAnnotation: any) => {
-        return new ConnectorAnnotationConfig({...storageAnnotation});
+        return new ConnectorAnnotationConfig({ ...storageAnnotation });
       });
     }
   }
@@ -275,15 +281,59 @@ export class PocTreeComponent {
     const { context: item } = event;
 
     if (item) {
-      let annotationsFound = this.annotations.filter((annotation: ConnectorAnnotationConfig) => {
-        return annotation.fromItem === item.id || annotation.toItem === item.id
-      })
+      this.nodeClickedId = item.id;
 
-      annotationsFound.forEach((annotation: ConnectorAnnotationConfig) => {
-        annotation.lineWidth = 1;
-      })
+      this.selectedAnnotations.forEach(
+        (annotation: ConnectorAnnotationConfig) => {
+          annotation.lineWidth = 0;
+        }
+      );
+
+      this.selectedAnnotations = this.annotations.filter(
+        (annotation: ConnectorAnnotationConfig) => {
+          return (
+            annotation.fromItem === item.id || annotation.toItem === item.id
+          );
+        }
+      );
+
+      this.selectedAnnotations.forEach(
+        (annotation: ConnectorAnnotationConfig) => {
+          annotation.lineWidth = 1;
+        }
+      );
     }
+  }
 
-    
-  };
+  getConnectorString(annotation: ConnectorAnnotationConfig): string {
+    if (annotation.fromItem === this.nodeClickedId) {
+      return '→ ' + annotation.toItem;
+    } else {
+      return '← ' + annotation.fromItem;
+    }
+  }
+
+  onLegendAnnotationClicked(annotation: ConnectorAnnotationConfig) {
+    //this.cursorItem = annotation.
+    if (annotation.fromItem === this.nodeClickedId) {
+      this.cursorItem = annotation.toItem ? annotation.toItem.toString() : '';
+      setTimeout(() => {
+        this.cursorItem = '';
+      }, 300);
+    } else {
+      this.cursorItem = annotation.fromItem
+        ? annotation.fromItem.toString()
+        : '';
+      setTimeout(() => {
+        this.cursorItem = '';
+      }, 300);
+    }
+  }
+
+  onParentNodeClick() {
+    this.cursorItem = this.nodeClickedId;
+    setTimeout(() => {
+      this.cursorItem = '';
+    }, 300);
+  }
 }
