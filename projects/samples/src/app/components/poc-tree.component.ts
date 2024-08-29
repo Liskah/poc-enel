@@ -204,21 +204,17 @@ export class PocTreeComponent {
       isLeft ? i >= 0 : i < this.items.length;
       isLeft ? i-- : i++
     ) {
-      console.log(i, this.items[i].id);
       if (startSearch && this.items[i].parent === null) {
         parentOfClickedNode = this.items[i];
         if (parentOfClickedNode) {
           this.cursorItem = parentOfClickedNode.id!.toString();
         }
-        console.log(parentOfClickedNode);
         break;
       }
       if (
         this.items[i].id === nodeClicked.id &&
         this.items[i].parent === null
       ) {
-        console.log(nodeClicked);
-        console.log(this.items[i]);
         startSearch = true;
       }
     }
