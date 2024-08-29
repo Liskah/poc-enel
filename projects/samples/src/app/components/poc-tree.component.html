@@ -13,6 +13,7 @@
 <div class="graph" *ngIf="!errorMsg">
     <org-diagram 
         [items]="items"
+        [annotations]="annotations"
         [pageFitMode]=PageFitMode.None
         [cursorItem]=cursorItem
         [linesWidth]=1
@@ -22,13 +23,13 @@
         [normalLevelShift]=20
         [dotLevelShift]=20
         [lineLevelShift]=20
-        [normalItemsInterval]=20
+        [normalItemsInterval]=80
         [dotItemsInterval]=30
         [lineItemsInterval]=30
         [hasSelectorCheckbox]=Enabled.False
         [centerOnCursor]=true
         [buttonsTemplate]="buttonsTemplate"
-        [buttonsPanelSize]=40
+        [buttonsPanelSize]=0
         [hasButtons]=Enabled.True
     >
     </org-diagram>
