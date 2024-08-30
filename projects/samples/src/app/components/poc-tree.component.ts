@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import {
   AnnotationType,
-  Colors,
   ConnectorAnnotationConfig,
   ConnectorPlacementType,
   ConnectorShapeType,
@@ -158,7 +157,7 @@ export class PocTreeComponent {
                 label: '',
                 size: new Size(40, 20),
                 connectorShapeType: ConnectorShapeType.OneWay,
-                color: Colors.Green,
+                color: 'rgba(96, 159, 96, 0.5)',
                 offset: 0,
                 lineWidth: 0,
                 lineType: LineType.Solid,

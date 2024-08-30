@@ -4,7 +4,9 @@ import {
   MatTreeFlatDataSource,
   MatTreeFlattener,
 } from '@angular/material/tree';
+import { initializeApp } from 'firebase/app';
 import libInfo from '../../../ngx-basic-primitives/package.json';
+import { environment } from '../environments/environment';
 
 interface SampleNode {
   name: string;
@@ -198,6 +200,7 @@ export class AppComponent {
   version: string = libInfo.version;
 
   constructor() {
+    const app = initializeApp(environment.firebase);
     this.dataSource.data = TREE_DATA;
     this.showFiller = true;
   }
