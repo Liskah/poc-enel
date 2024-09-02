@@ -15,6 +15,12 @@
             </button>
             <label for="resetTree" style="padding-left: 5px;">Resetta filtri</label>
         </div>
+    
+        <div>
+            <input class="input-root" type="number" id="selectLevelsTree" min="1" [(ngModel)]="levels" (input)="createTree()"/>
+            <label for="selectLevelsTree">Inserisci il numero di livelli dell'albero</label>
+        </div>
+    
         <div>
             <input class="input-root" type="number" id="selectRoot" min="1" [(ngModel)]="rootNodeId" (input)="selectNewRoot()"/>
             <label for="selectRoot">Inserisci un nodo radice</label>
@@ -82,6 +88,7 @@
             <mat-icon class="btn" (click)="onHideBtnClick(itemConfig)">visibility_off</mat-icon>
             <mat-icon class="btn" (click)="onUpLevelBtnClick(itemConfig)">keyboard_arrow_up</mat-icon>
             <mat-icon class="btn" (click)="onDownLevelBtnClick(itemConfig)">keyboard_arrow_down</mat-icon>
+            <mat-icon class="btn" (click)="onEditDescriptionBtnClick(itemConfig)">edit</mat-icon>
         </div>
     </ng-template>
 </div>

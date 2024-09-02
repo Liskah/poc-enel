@@ -20,6 +20,7 @@ import { MatTreeModule } from '@angular/material/tree';
 
 import { BasicPrimitivesModule } from 'ngx-basic-primitives';
 
+import { MatDialogModule } from '@angular/material/dialog';
 import { AddingNewItemsToChartAtRuntimeComponent } from './adding-new-items-to-chart-at-runtime.component';
 import { AdviserAndAssistantItemTypesComponent } from './adviser-and-assistant-item-types.component';
 import { AdviserPartnerItemTypeComponent } from './adviser-partner-item-type.component';
@@ -155,6 +156,7 @@ import { ZoomWithItemTemplateComponent } from './zoom-with-item-template.compone
     MatChipsModule,
     MatSlideToggleModule,
     FormsModule,
+    MatDialogModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

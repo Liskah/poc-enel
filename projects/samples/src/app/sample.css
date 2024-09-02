@@ -253,3 +253,9 @@
   margin-bottom: 20px;
   background-color: rgb(243, 249, 164);
 }
+
+.textarea {
+  resize: none;
+  width: 90%;
+  height: 5rem;
+}

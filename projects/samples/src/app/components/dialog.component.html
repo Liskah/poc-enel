@@ -1,0 +1,18 @@
+<!--<h2 mat-dialog-title>Delete file</h2>
+<mat-dialog-content>
+  Would you like to delete cat.jpeg?
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button mat-dialog-close>No</button>
+  <button mat-button mat-dialog-close cdkFocusInitial>Ok</button>
+</mat-dialog-actions>-->
+
+<h2 mat-dialog-title>Modifica descrizione</h2>
+<mat-dialog-content>
+    <p>Vuoi modificare la descrizione?</p>
+    <textarea class="textarea" rows="3" [(ngModel)]="description"></textarea>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">Annulla</button>
+  <button mat-button (click)="closeModal()" cdkFocusInitial>Conferma</button>
+</mat-dialog-actions>

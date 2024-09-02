@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, ViewChild, inject } from '@angular/core';
 import * as _html2canvas from 'html2canvas';
 import jspdf from 'jspdf';
 import {
@@ -12,6 +12,10 @@ import {
   PageFitMode,
   Thickness,
 } from 'ngx-basic-primitives';
+
+import { MatDialog } from '@angular/material/dialog';
+import { DialogComponent } from './dialog.componen';
+
 const html2canvas: any = _html2canvas;
 
 @Component({
@@ -51,14 +55,25 @@ export class PocFiltersComponent {
   localStorageKey = 'poc-filters-tree';
   disabledLoad = true;
 
+  readonly dialog = inject(MatDialog);
+
   ngOnInit(): void {
-    this.items = this.generateTree(this.levels);
+    this.createTree();
+  }
+
+  createTree() {
+    this.rootsValue = this.levels;
+    this.leafsValue = this.levels;
+    this.rootNodeId = 1;
+    this.resetGroupObjValues();
+    this.items = this.generateTree();
     this.itemsOriginal = JSON.parse(JSON.stringify(this.items));
 
     this.disabledLoad = !this.checkSavedTree();
   }
 
-  generateTree(n: number) {
+  generateTree() {
+    const n = this.levels;
     for (let i = 0; i < 10; i++) {
       this.annotations.push(
         new LevelAnnotationConfig({
@@ -284,6 +299,20 @@ export class PocFiltersComponent {
     }
   }
 
+  onEditDescriptionBtnClick(itemClicked: OrgItemConfig) {
+    const dialogRef = this.dialog.open(DialogComponent, {
+      width: '600px',
+      enterAnimationDuration: '1000ms',
+      exitAnimationDuration: '1000ms',
+      data: { description: itemClicked.description },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) itemClicked.description = result;
+      console.log(`Dialog result: ${result}`);
+    });
+  }
+
   // Genearate Pdf using canvas return the generated pdf
   private async generatePdf(): Promise<jspdf> {
     const htmlElement = document.getElementById('printcontent');
@@ -348,11 +377,11 @@ export class PocFiltersComponent {
   }
 
   checkSavedTree(): boolean {
-    let pippo = localStorage.getItem(this.localStorageKey);
-    if (pippo) {
-      pippo = JSON.parse(pippo);
+    let storage = localStorage.getItem(this.localStorageKey);
+    if (storage) {
+      storage = JSON.parse(storage);
     }
-    return pippo && pippo.length > 0 ? true : false;
+    return storage && storage.length > 0 ? true : false;
   }
 
   deleteTree() {
