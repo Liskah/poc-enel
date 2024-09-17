@@ -2,7 +2,7 @@ export const mycolors = [
   { background: '#1556df', text: 'white' },
   { background: '#009cff', text: 'white' },
   { background: '#00d0ed', text: 'black' },
-  { background: '#6afbcf', text: 'black' },
+  { background: '#ffedcb', text: 'black' },
   // { background: '#bac7ff', text: 'black' },
 
   //  { background: '#aba9bc', text: 'white' },

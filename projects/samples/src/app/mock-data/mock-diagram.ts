@@ -13,7 +13,7 @@ export const diagramItems: FamItemConfig[] = [
     image: null,
     context: {
       colors: {
-        background: '#6afbcf',
+        background: '#ffedcb',
         text: 'black',
       },
       isQuotata: false,
@@ -49,7 +49,7 @@ export const diagramItems: FamItemConfig[] = [
     image: null,
     context: {
       colors: {
-        background: '#6afbcf',
+        background: '#ffedcb',
         text: 'black',
       },
       isQuotata: false,
@@ -224,7 +224,7 @@ export const diagramItems: FamItemConfig[] = [
     image: null,
     context: {
       colors: {
-        background: '#6afbcf',
+        background: '#ffedcb',
         text: 'black',
       },
       isQuotata: true,
@@ -329,7 +329,7 @@ export const diagramItems: FamItemConfig[] = [
     image: null,
     context: {
       colors: {
-        background: '#6afbcf',
+        background: '#ffedcb',
         text: 'black',
       },
       isQuotata: true,
