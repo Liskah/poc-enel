@@ -1,5 +1,5 @@
-<h1>Grafo ricavato dai dati reali</h1>
-<div class="flex-container justify">
+<!-- <h1>Grafo ricavato dai dati reali</h1> -->
+<!-- <div class="flex-container justify">
     <div class="flex-child-3">
         <textarea class="textarea" placeholder="Incolla qui il tuo json . . ." [(ngModel)]="jsonTextArea"></textarea>
     </div>
@@ -7,16 +7,16 @@
         <button class="btn btn-spaced resetBtn" (click)="onJsonReset()">Reset</button>
         <button class="btn btn-spaced submitBtn" (click)="onJsonSubmit()">Genera</button>
     </div>
-</div>
+</div> -->
 <div class="padding-top-bottom">
     <button class="box-margin" mat-fab extended color="success" (click)="saveTree()">
         <mat-icon>save</mat-icon>
         Salva albero
     </button>
-    <button class="box-margin" mat-fab extended color="primary" (click)="loadTree()" [disabled]="disabledLoad" [ngClass]="{'disabled': disabledLoad}">
+    <!-- <button class="box-margin" mat-fab extended color="primary" (click)="loadTree()" [disabled]="disabledLoad" [ngClass]="{'disabled': disabledLoad}">
         <mat-icon>publish</mat-icon>
         Carica albero
-    </button>
+    </button> -->
     <button class="box-margin" mat-fab extended color="danger" (click)="deleteTree()" [disabled]="disabledLoad" [ngClass]="{'disabled': disabledLoad}">
         <mat-icon>delete</mat-icon>
         Elimina albero salvato
@@ -88,7 +88,7 @@
          (click)="changeComment(itemConfig)">
         <div><h4 
             [ngStyle]="{'background-color': itemConfig.context.colors.background, 'color': itemConfig.context.colors.text }"
-            class="no-margin">{{itemConfig.title}}</h4></div>
+            class="no-margin companyName">{{itemConfig.title}}</h4></div>
         <div><p class="comment">{{itemConfig.label}}</p></div>
     </div>
 </ng-template>
