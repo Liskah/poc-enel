@@ -103,7 +103,7 @@
 <ng-template #buttonsTemplate let-itemConfig="context">
     <div class="node-btn-group">
         <mat-icon class="btn" (click)="hideShowChildren(itemConfig)">expand_more</mat-icon>
-        <mat-icon class="btn" (click)="moveLeft(itemConfig)">keyboard_arrow_left</mat-icon>
-        <mat-icon class="btn" (click)="hideShowChildren(itemConfig)">keyboard_arrow_right</mat-icon>
+        <mat-icon class="btn" (click)="moveNode(itemConfig)">keyboard_arrow_left</mat-icon>
+        <mat-icon class="btn" (click)="moveNode(itemConfig)">keyboard_arrow_right</mat-icon>
     </div>
 </ng-template>

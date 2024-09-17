@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import {
+  AdviserPlacementType,
   AnnotationType,
   Colors,
   Enabled,
@@ -254,7 +255,7 @@ export class PocEnelComponent {
   }
 
   changeComment(itemClicked: FamItemConfig) {
-    console.log(itemClicked.id);
+    console.log(itemClicked);
     const dialogRef = this.dialog.open(DialogComponent, {
       width: '600px',
       enterAnimationDuration: '1000ms',
@@ -292,6 +293,7 @@ export class PocEnelComponent {
     }
   }
 
+  /*
   moveLeft(itemConfig: FamItemConfig) {
     let found = false;
     for (let i = 0; i < this.items.length; i++) {
@@ -303,6 +305,17 @@ export class PocEnelComponent {
       if (this.items[i].id === itemConfig.id) {
         found = true;
       }
+    }
+  }
+  */
+
+  moveNode(itemConfig: FamItemConfig) {
+    console.log(itemConfig.placementType);
+
+    if (itemConfig.placementType === AdviserPlacementType.Left) {
+      itemConfig.placementType = AdviserPlacementType.Right;
+    } else {
+      itemConfig.placementType = AdviserPlacementType.Left;
     }
   }
 }
