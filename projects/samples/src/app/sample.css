@@ -315,3 +315,11 @@
   text-overflow: ellipsis;
   overflow: hidden;
 }
+
+.photo-frame.item{
+  display: none !important;
+}
+
+div.item.description{
+background: pink;
+}
