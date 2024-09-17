@@ -1,7 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import {
-  AdviserPlacementType,
   AnnotationType,
   Colors,
   Enabled,
@@ -399,12 +398,43 @@ export class PocEnelComponent {
   */
 
   moveNode(itemConfig: FamItemConfig) {
-    console.log(itemConfig.placementType);
+    console.log(itemConfig.position);
+    if (itemConfig.position !== null && itemConfig.position < 5) {
+      itemConfig.position++;
+    } else {
+      itemConfig.position = 0;
+    }
 
+    /*
+    console.log(itemConfig.placementType);
     if (itemConfig.placementType === AdviserPlacementType.Left) {
       itemConfig.placementType = AdviserPlacementType.Right;
     } else {
       itemConfig.placementType = AdviserPlacementType.Left;
     }
+    */
+  }
+
+  downLevel(itemConfig: FamItemConfig) {
+    console.log(this.items);
+    const random = Math.floor(Math.random() * 100);
+    const id = random.toString();
+    console.log('ITEMCONFIG: ', itemConfig);
+    console.log('ITEMCONFIG: ', itemConfig.parents);
+    console.log(id);
+
+    const newItem = {
+      title: '',
+      id: id,
+      parents: itemConfig.parents ? itemConfig.parents : [],
+      templateName: 'invisibleTemplate',
+      hasButtons: 2,
+    };
+    itemConfig.parents = [id];
+    this.items = [newItem as unknown as FamItemConfig, ...this.items];
+    console.log('ITEMCONFIG2: ', itemConfig);
+    console.log('ITEMS: ', this.items);
+
+    //this.items.push(newItem);
   }
 }

@@ -57,6 +57,16 @@
                 cursorTemplate: contactCursorTemplate,
                 highlightTemplate: contactHighlightTemplate,
                 cursorPadding: { left: 0, top: 0, right: 0, bottom: 0 }
+            },
+            {
+                name: 'invisibleTemplate',
+                itemSize: { width: 0, height: 0 },
+                minimizedItemSize: { width: 3, height: 3 },
+                highlightPadding: { left: 4, top: 4, right: 4, bottom: -18 },
+                itemTemplate: invisibleTemplate,
+                cursorTemplate: contactCursorTemplate,
+                highlightTemplate: contactHighlightTemplate,
+                cursorPadding: { left: 0, top: 0, right: 0, bottom: 0 }
             }
         ]"
     >
@@ -93,6 +103,11 @@
     </div>
 </ng-template>
 
+
+<ng-template #invisibleTemplate let-itemConfig="context" let-isCursor="isCursor">
+    <div></div>
+</ng-template>
+
 <ng-template #contactCursorTemplate let-itemConfig="context">
 </ng-template>
 <ng-template #contactHighlightTemplate let-itemConfig="context">
@@ -102,7 +117,7 @@
 
 <ng-template #buttonsTemplate let-itemConfig="context">
     <div class="node-btn-group">
-        <mat-icon class="btn" (click)="hideShowChildren(itemConfig)">expand_more</mat-icon>
+        <mat-icon class="btn" (click)="downLevel(itemConfig)">expand_more</mat-icon>
         <mat-icon class="btn" (click)="moveNode(itemConfig)">keyboard_arrow_left</mat-icon>
         <mat-icon class="btn" (click)="moveNode(itemConfig)">keyboard_arrow_right</mat-icon>
     </div>
