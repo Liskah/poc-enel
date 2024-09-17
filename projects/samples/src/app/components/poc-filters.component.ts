@@ -14,7 +14,7 @@ import {
 } from 'ngx-basic-primitives';
 
 import { MatDialog } from '@angular/material/dialog';
-import { DialogComponent } from './dialog.componen';
+import { DialogComponent } from './dialog.component';
 
 const html2canvas: any = _html2canvas;
 

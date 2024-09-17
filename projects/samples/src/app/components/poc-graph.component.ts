@@ -8,8 +8,11 @@ import {
   PageFitMode,
 } from 'ngx-basic-primitives';
 import { mockData } from '../mock-data/mock-data';
+import { mockNames } from '../mock-data/mock-names';
 import { Utils } from '../utils/utils.component';
 // @ts-ignore
+
+export type Company = { value: string; companyId: string };
 
 @Component({
   selector: 'app-poc-graph',
@@ -31,12 +34,26 @@ export class PocGraphComponent {
   localStorageKey = 'poc-graph';
   disabledLoad = true;
 
+  companyNames: Company[] = [];
+
   ngOnInit(): void {
+    this.companyNames = mockNames;
     this.calculateGraph(mockData);
     this.disabledLoad = !this.checkSavedTree();
   }
 
   calculateGraph(json: any) {
+    /*
+    const tempSet = new Set<string>([]);
+    json.forEach((node: any) => {
+      tempSet.add(node.idCompany);
+      node.azionistiModel.forEach((azionista: any) => {
+        tempSet.add(azionista.idAzionista);
+      });
+    });
+    console.log(JSON.stringify([...tempSet]));
+    */
+
     const parents = new Set<string>([]);
     this.items = [];
     this.annotations = [];
@@ -65,12 +82,15 @@ export class PocGraphComponent {
 
         if (parents.has(id)) {
         } else {
+          const companyName = this.companyNames.find((company: Company) => {
+            return company.companyId === azionista.idAzionista;
+          });
           const graphItem = new FamItemConfig({
             id: id,
             parents: [],
-            title: valuta,
+            title: companyName ? companyName.value : 'Not Found',
             label: 'Corp ' + id,
-            description: 'Parent ' + id,
+            description: 'Id: ' + id + '\nValuta: ' + valuta,
             image: `./assets/photos/${valuta.slice(0, 1).toLowerCase()}.png`,
             itemTitleColor: colorItem,
             groupTitle: element.azioniModel[0].isValoreNominale
@@ -128,23 +148,25 @@ export class PocGraphComponent {
   }
 
   saveTree() {
-    localStorage.setItem(this.localStorageKey, JSON.stringify({items: this.items, annotations: this.annotations}));
+    localStorage.setItem(
+      this.localStorageKey,
+      JSON.stringify({ items: this.items, annotations: this.annotations })
+    );
     this.items && this.items.length
       ? (this.disabledLoad = false)
       : (this.disabledLoad = true);
-    
   }
 
   loadTree() {
     const storedItem = localStorage.getItem(this.localStorageKey);
 
     if (storedItem) {
-      const {items, annotations} = JSON.parse(storedItem);
+      const { items, annotations } = JSON.parse(storedItem);
       this.items = items.map((storageItem: any) => {
-        return new FamItemConfig({...storageItem});
+        return new FamItemConfig({ ...storageItem });
       });
       this.annotations = annotations.map((storageAnnotation: any) => {
-        return new LabelAnnotationConfig({...storageAnnotation});
+        return new LabelAnnotationConfig({ ...storageAnnotation });
       });
     }
   }

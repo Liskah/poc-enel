@@ -28,6 +28,7 @@ import { AutoSizeComponent } from './auto-size.component';
 import { ButtonsPanelComponent } from './buttons-panel.component';
 import { ChildrenAndAssistantsLevelOffsetComponent } from './children-and-assistants-level-offset.component';
 import { ChildrenPlacementTypeComponent } from './children-placement-type.component';
+import { PocEnelComponent } from './components/poc-enel.component';
 import { PocFiltersComponent } from './components/poc-filters.component';
 import { PocGraphComponent } from './components/poc-graph.component';
 import { PocTreeComponent } from './components/poc-tree.component';
@@ -137,6 +138,7 @@ import { ZoomWithItemTemplateComponent } from './zoom-with-item-template.compone
     PocGraphComponent,
     PocTreeComponent,
     PocFiltersComponent,
+    PocEnelComponent,
   ],
   imports: [
     BrowserModule,

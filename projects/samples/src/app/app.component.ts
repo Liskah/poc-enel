@@ -15,7 +15,6 @@ interface SampleNode {
 }
 
 const TREE_DATA: SampleNode[] = [
-  /*
   {
     name: 'Create & Update Use Cases',
     children: [
@@ -147,13 +146,14 @@ const TREE_DATA: SampleNode[] = [
       },
     ],
   },
-  */
+
   {
     name: 'Esempi',
     children: [
       { name: 'Esempio Grafo', path: 'examplegraph' },
       { name: 'Esempio Albero', path: 'exampletree' },
       { name: 'Esempio Filtri', path: 'examplefilters' },
+      { name: 'Esempio Enel', path: 'exampleenel' },
     ],
   },
 ];

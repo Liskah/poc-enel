@@ -1,0 +1,107 @@
+<h1>Grafo ricavato dai dati reali</h1>
+<div class="flex-container justify">
+    <div class="flex-child-3">
+        <textarea class="textarea" placeholder="Incolla qui il tuo json . . ." [(ngModel)]="jsonTextArea"></textarea>
+    </div>
+    <div class="flex-child submitDiv">
+        <button class="btn btn-spaced resetBtn" (click)="onJsonReset()">Reset</button>
+        <button class="btn btn-spaced submitBtn" (click)="onJsonSubmit()">Genera</button>
+    </div>
+</div>
+<div class="padding-top-bottom">
+    <button class="box-margin" mat-fab extended color="success" (click)="saveTree()">
+        <mat-icon>save</mat-icon>
+        Salva albero
+    </button>
+    <button class="box-margin" mat-fab extended color="primary" (click)="loadTree()" [disabled]="disabledLoad" [ngClass]="{'disabled': disabledLoad}">
+        <mat-icon>publish</mat-icon>
+        Carica albero
+    </button>
+    <button class="box-margin" mat-fab extended color="danger" (click)="deleteTree()" [disabled]="disabledLoad" [ngClass]="{'disabled': disabledLoad}">
+        <mat-icon>delete</mat-icon>
+        Elimina albero salvato
+    </button>
+</div>
+
+
+<div class="graph" *ngIf="!errorMsg">
+    <fam-diagram 
+        [items]="items"
+        [annotations]="annotations"
+        [pageFitMode]=PageFitMode.None
+        [cursorItem]=1
+        [linesWidth]=1
+        [arrowsDirection]=GroupByType.Children
+        [showExtraArrows]=true
+        [linesColor]="'black'"
+        [normalLevelShift]=20
+        [dotLevelShift]=20
+        [lineLevelShift]=20
+        [normalItemsInterval]=20
+        [dotItemsInterval]=30
+        [lineItemsInterval]=30
+        [hasSelectorCheckbox]=Enabled.False
+        [enableMatrixLayout]=true
+        [minimumMatrixSize]=3
+        [centerOnCursor]=true
+        [buttonsTemplate]="buttonsTemplate"
+        [buttonsPanelSize]=40
+        [hasButtons]=Enabled.True
+        [templates]="[
+            {
+                name: 'contactTemplate',
+                itemSize: { width: 200, height: 150 },
+                minimizedItemSize: { width: 3, height: 3 },
+                highlightPadding: { left: 4, top: 4, right: 4, bottom: -18 },
+                itemTemplate: contactTemplate,
+                cursorTemplate: contactCursorTemplate,
+                highlightTemplate: contactHighlightTemplate,
+                cursorPadding: { left: 0, top: 0, right: 0, bottom: 0 }
+            }
+        ]"
+    >
+    </fam-diagram>
+
+    <div class="legend">
+        <div class="legend-button">
+            <div *ngIf="showLegend" class="legend-content">
+                <div *ngFor="let item of legendItems" class="legend-item-wrapper flex-container">
+                    {{item.name}}
+                   <div [ngStyle]="{'background-color': item.color}" class="legend-item"></div>
+                </div>
+            </div>
+            <div class="legend-on-over" (mouseenter)="showLegend = true" (mouseleave)="showLegend = false">
+                LEGEND
+            </div>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="errorMsg" class="error">
+    {{errorMsg}}
+</div>
+
+<ng-template #contactTemplate let-itemConfig="context" let-isCursor="isCursor">
+    <div class="node-template"
+         [ngClass]="{'quotata': itemConfig.context.isQuotata}"
+         [ngStyle]="{'background-color': itemConfig.context.colors.background, 'color': itemConfig.context.colors.text }"
+         (click)="changeComment(itemConfig)">
+        <div><h4 class="no-margin">{{itemConfig.title}}</h4></div>
+        <div><p class="comment">{{itemConfig.label}}</p></div>
+    </div>
+</ng-template>
+
+<ng-template #contactCursorTemplate let-itemConfig="context">
+</ng-template>
+<ng-template #contactHighlightTemplate let-itemConfig="context">
+    <div class="highlight-frame"></div>
+</ng-template>
+
+
+<ng-template #buttonsTemplate let-itemConfig="context">
+    <div class="node-btn-group">
+        <mat-icon class="btn" (click)="hideShowChildren(itemConfig)">expand_more</mat-icon>
+        <mat-icon class="btn" (click)="moveLeft(itemConfig)">keyboard_arrow_left</mat-icon>
+        <mat-icon class="btn" (click)="hideShowChildren(itemConfig)">keyboard_arrow_right</mat-icon>
+    </div>
+</ng-template>
