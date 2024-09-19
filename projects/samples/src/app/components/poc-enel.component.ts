@@ -440,12 +440,55 @@ export class PocEnelComponent {
   }
 
   changePlacement(itemConfig: FamItemConfig) {
-    console.log(itemConfig.placementType);
+    //console.log(itemConfig.placementType);
     if (itemConfig.placementType === AdviserPlacementType.Left) {
       itemConfig.placementType = AdviserPlacementType.Right;
     } else {
       itemConfig.placementType = AdviserPlacementType.Left;
     }
+    this.printPositionStatus(itemConfig);
+  }
+
+  changePosition(itemConfig: FamItemConfig) {
+    //console.log(itemConfig.position);
+    if (itemConfig.position !== null && itemConfig.position < 5) {
+      itemConfig.position++;
+    } else {
+      itemConfig.position = 0;
+    }
+    this.printPositionStatus(itemConfig);
+  }
+
+  changeRelative(itemConfig: FamItemConfig) {
+    const child = this.items.find((item) => {
+      return item.parents.includes(itemConfig.id!);
+    });
+
+    if (child) {
+      //console.log(child.parents);
+      //console.log('RELATIVE: ', itemConfig.relativeItem);
+      let index;
+      if (
+        itemConfig.relativeItem !== null &&
+        itemConfig.relativeItem !== child.parents[child.parents.length - 1]
+      ) {
+        index = child?.parents.indexOf(itemConfig.relativeItem);
+        if (index >= 0) {
+          itemConfig.relativeItem = child.parents[index + 1];
+        }
+      } else {
+        itemConfig.relativeItem = child ? child.parents[0] : null;
+      }
+    }
+    this.printPositionStatus(itemConfig);
+  }
+
+  printPositionStatus(itemConfig: FamItemConfig) {
+    console.log('\nID: ', itemConfig.id);
+    console.log('NAME: ', itemConfig.title);
+    console.log('PLACEMENT: ', itemConfig.placementType);
+    console.log('POSITION: ', itemConfig.position);
+    console.log('RELATIVE: ', itemConfig.relativeItem);
   }
 
   downLevel(itemConfig: FamItemConfig) {
@@ -473,6 +516,20 @@ export class PocEnelComponent {
     console.log('ITEMS: ', this.items);
 
     //this.items.push(newItem);
+  }
+
+  upLevel(itemConfig: FamItemConfig) {
+    const found = this.items.find((item) => {
+      return (
+        item.id === itemConfig.parents[0] &&
+        item.templateName === 'invisibleTemplate'
+      );
+    });
+
+    if (found) {
+      itemConfig.parents = found.parents;
+      this.items = this.items.filter((item) => item.id !== found.id);
+    }
   }
 
   makePrimary(itemConfig: FamItemConfig) {

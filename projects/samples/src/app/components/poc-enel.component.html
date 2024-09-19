@@ -128,12 +128,13 @@
 
 <ng-template #buttonsTemplate let-itemConfig="context">
     <div class="node-btn-group">
-        <mat-icon class="btn" (click)="downLevel(itemConfig)">expand_more</mat-icon>
+        <mat-icon *ngIf="itemConfig.parents.length > 0" class="btn" (click)="upLevel(itemConfig)">expand_less</mat-icon>
+        <mat-icon *ngIf="itemConfig.parents.length > 0" class="btn" (click)="downLevel(itemConfig)">expand_more</mat-icon>
         <mat-icon class="btn" (click)="moveNode(itemConfig, true)">keyboard_arrow_left</mat-icon>
         <mat-icon class="btn" (click)="moveNode(itemConfig, false)">keyboard_arrow_right</mat-icon>
-        <!--<mat-icon class="btn" (click)="makePrimary(itemConfig)">close</mat-icon>
-        <mat-icon class="btn" (click)="makePrimary(itemConfig)">close</mat-icon>
-        <mat-icon class="btn" (click)="makePrimary(itemConfig)">close</mat-icon>-->
+       <!-- <mat-icon class="btn" (click)="changePlacement(itemConfig)">close</mat-icon>
+        <mat-icon class="btn" (click)="changePosition(itemConfig)">close</mat-icon>
+        <mat-icon class="btn" (click)="changeRelative(itemConfig)">close</mat-icon>-->
 
     </div>
 </ng-template>

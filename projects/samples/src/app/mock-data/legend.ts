@@ -1,4 +1,4 @@
-export const countryColors: {
+export const excountryColors: {
   name: string;
   background: string;
   color: string;
@@ -36,6 +36,18 @@ export const countryColors: {
   { name: 'VG', background: '#00247D', color: 'white' }, // Virgin Islands (UK)
   { name: 'ZA', background: '#007847', color: 'white' }, // South Africa
   { name: 'ZM', background: '#198A00', color: 'white' }, // Zambia
+];
+
+export const countryColors: {
+  name: string;
+  background: string;
+  color: string;
+}[] = [
+  { name: '_', background: '#808080', color: 'white' }, // Default/neutral color
+  { name: 'CA', background: '#1556df', color: 'white' }, // Canada
+  { name: 'IT', background: '#009cff', color: 'white' }, // Italy
+  { name: 'US', background: '#00d0ed', color: 'black' }, // USA
+  { name: 'VG', background: '#ffedcb', color: 'black' }, // Virgin Islands (UK)
 ];
 
 export const oldlegend = [
