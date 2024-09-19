@@ -8,6 +8,7 @@
         <button class="btn btn-spaced submitBtn" (click)="onJsonSubmit()">Genera</button>
     </div>
 </div> -->
+<!--<button (click)="reverseItems()">reverse diagram</button>-->
 <div class="padding-top-bottom">
     <button class="box-margin" mat-fab extended color="success" (click)="saveTree()">
         <mat-icon>save</mat-icon>
@@ -26,6 +27,7 @@
 
 <div class="graph" *ngIf="!errorMsg">
     <fam-diagram 
+        [orientationType]="orientationType"
         [items]="items"
         [annotations]="annotations"
         [pageFitMode]=PageFitMode.None
@@ -41,7 +43,7 @@
         [dotItemsInterval]=30
         [lineItemsInterval]=30
         [hasSelectorCheckbox]=Enabled.False
-        [enableMatrixLayout]=true
+        [enableMatrixLayout]=false
         [minimumMatrixSize]=3
         [centerOnCursor]=true
         [buttonsTemplate]="buttonsTemplate"
@@ -94,12 +96,21 @@
 <ng-template #contactTemplate let-itemConfig="context" let-isCursor="isCursor">
     <div class="node-template"
          [ngClass]="{'quotata': itemConfig.context.isQuotata}"
-         [ngStyle]="{'background-color': '#EBF1FD'}"
-         (click)="changeComment(itemConfig)">
-        <div><h4 
-            [ngStyle]="{'background-color': itemConfig.context.colors.background, 'color': itemConfig.context.colors.text }"
-            class="no-margin companyName">{{itemConfig.title}}</h4></div>
-        <div><p class="comment">{{itemConfig.label}}</p></div>
+         [ngStyle]="{'background-color': '#EBF1FD'}">
+        <div class="btn" (click)="changeColor(itemConfig)">
+            <h4 [ngStyle]="{'background-color': itemConfig.context.colors.background, 'color': itemConfig.context.colors.color }"
+            class="no-margin companyName">{{itemConfig.title}}</h4>
+        </div>
+        <!--<div><p class="comment">{{itemConfig.label}}</p></div>-->
+        <div class="btn" (click)="changeGbl(itemConfig)">
+            <p class="comment">{{itemConfig.context.gbl}}</p>
+        </div>
+        <!--<div><p class="comment">{{itemConfig.context.country}}</p></div>-->
+        <div class="btn" (click)="changePrevalentBusiness(itemConfig)">
+            <p class="comment">{{itemConfig.context.prevBusiness}}</p>
+        </div>
+
+
     </div>
 </ng-template>
 
@@ -118,7 +129,11 @@
 <ng-template #buttonsTemplate let-itemConfig="context">
     <div class="node-btn-group">
         <mat-icon class="btn" (click)="downLevel(itemConfig)">expand_more</mat-icon>
-        <mat-icon class="btn" (click)="moveNode(itemConfig)">keyboard_arrow_left</mat-icon>
-        <mat-icon class="btn" (click)="moveNode(itemConfig)">keyboard_arrow_right</mat-icon>
+        <mat-icon class="btn" (click)="moveNode(itemConfig, true)">keyboard_arrow_left</mat-icon>
+        <mat-icon class="btn" (click)="moveNode(itemConfig, false)">keyboard_arrow_right</mat-icon>
+        <!--<mat-icon class="btn" (click)="makePrimary(itemConfig)">close</mat-icon>
+        <mat-icon class="btn" (click)="makePrimary(itemConfig)">close</mat-icon>
+        <mat-icon class="btn" (click)="makePrimary(itemConfig)">close</mat-icon>-->
+
     </div>
 </ng-template>

@@ -40,6 +40,8 @@ export class PocGraphComponent {
     this.companyNames = mockNames;
     this.calculateGraph(mockData);
     this.disabledLoad = !this.checkSavedTree();
+    console.log(this.items);
+    console.log(this.annotations);
   }
 
   calculateGraph(json: any) {
