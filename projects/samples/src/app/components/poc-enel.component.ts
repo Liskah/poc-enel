@@ -35,6 +35,7 @@ export class PocEnelComponent {
   Enabled = Enabled;
   GroupByType = GroupByType;
   orientationType = OrientationType.Top;
+  matrixLayout = false;
 
   items: FamItemConfig[] = [];
   annotations: (LabelAnnotationConfig | HighlightPathAnnotationConfig)[] = [];
@@ -225,6 +226,10 @@ export class PocEnelComponent {
 
       this.items = [...this.items, gItem];
     });
+  }
+
+  changeMatrixLayout() {
+    this.matrixLayout = !this.matrixLayout;
   }
 
   onJsonSubmit() {

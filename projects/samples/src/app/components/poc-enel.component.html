@@ -22,6 +22,11 @@
         <mat-icon>delete</mat-icon>
         Elimina albero salvato
     </button>
+
+    <button class="box-margin" mat-fab extended color="primary" (click)="changeMatrixLayout()">
+        <mat-icon>{{matrixLayout ? 'apps' : 'more_horiz'}}</mat-icon>
+        Cambia visualizzazione
+    </button>
 </div>
 
 
@@ -43,7 +48,7 @@
         [dotItemsInterval]=30
         [lineItemsInterval]=30
         [hasSelectorCheckbox]=Enabled.False
-        [enableMatrixLayout]=false
+        [enableMatrixLayout]=matrixLayout
         [minimumMatrixSize]=3
         [centerOnCursor]=true
         [buttonsTemplate]="buttonsTemplate"
